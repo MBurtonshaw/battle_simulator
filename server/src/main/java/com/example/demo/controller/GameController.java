@@ -16,6 +16,7 @@ import java.util.List;
 public class GameController {
     private final HeroDao heroDao;
     private final ScoreDao scoreDao;
+
     public GameController(HeroDao heroDao, ScoreDao scoreDao) {
         this.heroDao = heroDao;
         this.scoreDao = scoreDao;
@@ -38,6 +39,26 @@ public class GameController {
             return heroDao.addHero(name.getName());
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Hero not found", e);
+        }
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////
+    @RequestMapping(path = "api/hero/{heroId}", method = RequestMethod.POST)
+    public Hero takeDamage(@PathVariable int heroId, @RequestBody int damage) {
+        try {
+            return heroDao.takeDamage(damage, heroId);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Score not found", e);
+        }
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////
+    @RequestMapping(path = "api/hero/{heroId}/win", method = RequestMethod.POST)
+    public Hero defeatEnemy(@PathVariable int heroId, @RequestBody int exp) {
+        try {
+            return heroDao.defeatEnemy(exp, heroId);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Score not found", e);
         }
     }
 

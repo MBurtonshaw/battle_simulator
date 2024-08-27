@@ -33,7 +33,9 @@ export class Provider extends Component {
         actions: {
           getHero: this.getHero,
           addHero: this.addHero,
-          setLatestHeroId: this.setLatestHeroId
+          setLatestHeroId: this.setLatestHeroId,
+          attack: this.attack,
+          defeatEnemy: this.defeatEnemy
         }
       }
   
@@ -67,6 +69,15 @@ export class Provider extends Component {
     setLatestHeroId = (id) => {
       this.setState({ latestHeroId: id });
     }
+
+    defeatEnemy = async (heroId, exp) => {
+      try {
+        await this.data.defeatEnemy(heroId, exp);
+      } catch(error) {
+        this.setState({error});
+      }
+    }
+
   }
 
 export const Consumer = Context.Consumer;

@@ -46,4 +46,36 @@ public class JdbcHeroDao implements HeroDao {
         newHero.setName(name);
         return newHero;
     }
+
+    public Hero takeDamage(int damage, int heroId) {
+        Hero updatedHero = null;
+        String damageSql = "UPDATE hero SET health_points = health_points - ? WHERE hero_id = ?;";
+        try {
+           int numberOfRows = jdbcTemplate.update(damageSql, damage, heroId);
+           if (numberOfRows == 0) {
+                throw new Exception("Could not update hero's health");
+           } else {
+                updatedHero = getHero(heroId);
+           }
+        } catch (Exception e) {
+            logger.error("Error damaging hero with ID {}: {}", heroId, e.getMessage());
+        }
+        return updatedHero;
+    }
+
+    public Hero defeatEnemy(int exp, int heroId) {
+        String victorySql = "UPDATE hero SET enemies_defeated = enemies_defeated + 1, exp_points = exp_points + ? WHERE hero_id = ?;";
+        try {
+            int numberOfRows = jdbcTemplate.update(victorySql, exp, heroId);
+            if (numberOfRows == 1) {
+                return getHero(heroId);
+            } else {
+                logger.warn("No hero updated for ID {}", heroId);
+                throw new RuntimeException("Hero not found or no update performed");
+            }
+        } catch (Exception e) {
+            logger.error("Error claiming victory for hero with ID {}: {}", heroId, e.getMessage());
+            throw new RuntimeException("Error claiming victory", e);
+        }
+    }
 }

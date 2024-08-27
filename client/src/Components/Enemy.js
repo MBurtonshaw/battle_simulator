@@ -7,26 +7,26 @@ function Enemy() {
   
   const { data, actions } = useContext(Context);
   const [ state ] = data;
-  const { enemyId } = useParams();
+  const { heroId, enemyId } = useParams();
   const [ enemy, setEnemy ] = useState('');
   const [ hero, setHero ] = useState('');
 
   async function getData() {
     setEnemy(enemies.enemies[enemyId]);
+    actions.getHero(heroId).then(response => {setHero(response)});
   }
 
   useEffect(() => {getData()}, [])
-  useEffect(() => {setHero(data[0].hero)}, [])
     return (
-      <div className="row align-items-center w-75 m-auto">
-        <div className='col text-center'>
-          <h1 className='col text-center'>{`${enemy.name}`}</h1>
-          <p>{`Health: ${enemy.healthPoints}`}</p>
-        </div>
-        <div className='col text-center'>
-          <h1>{`${hero.name}`}</h1>
-          <div className='row w-50 m-auto'>
-            <p className='col'>{`Health: ${hero.healthPoints}`}</p><p className='col'>{`Magic: ${hero.magicPoints}`}</p>
+      <div className="w-75 m-auto text-center">
+        <div className='mt-5'>
+          <h1 className=''>New Opponent Has Appeared!</h1>
+          <div className='mt-5'>
+            <h2 class='p-5'>{`${enemy.name}`}</h2>
+            <img src='' alt={`${enemy.name}, fighting pose`}/>
+          </div>
+          <div className='p-5'>
+            <a href={`/${heroId}/battle/${enemyId}`}><button className='py-1 px-3'>To Battle!</button></a>
           </div>
         </div>
       </div>

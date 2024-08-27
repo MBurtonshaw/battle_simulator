@@ -51,4 +51,13 @@ export default class Data {
       throw error;
     }
   }
+
+  async defeatEnemy(heroId, exp) {
+    try {
+      return await this.api(`api/hero/${heroId}/win`, 'POST', exp)
+    } catch(error) {
+      console.error('Failed to update after victory:', error);
+      throw error;
+    }
+  }
 }

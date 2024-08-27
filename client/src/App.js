@@ -29,13 +29,13 @@ function App() {
               }
             />
             <Route
-              path='/:id/enemy/:enemyId'
+              path='/:heroId/enemy/:enemyId'
               element={
                 <Enemy />
               }
             />
             <Route
-              path='/battle'
+              path='/:heroId/battle/:enemyId'
               element={
                 <Battle />
               }
@@ -53,7 +53,7 @@ function App() {
               }
             />
             <Route
-              path='/level_up'
+              path='/level_up/:heroId'
               element={
                 <LevelUp />
               }

@@ -1,7 +1,8 @@
 <h3 align="center">Save the kingdom, in the Battle Simulator!</h3>
 
-<h3 align="left">Connect with me:</h3>
+
 <p align="left">
+  A full-stack game in which the user creates a hero character to battle their way through various enemies and save the kingdom! Learn spells, win potions, and strategize your way to victory!
 </p>
 
 <h3 align="left">Languages and Tools:</h3>

@@ -29,7 +29,7 @@ function App() {
               }
             />
             <Route
-              path='/enemy'
+              path='/:id/enemy/:enemyId'
               element={
                 <Enemy />
               }

@@ -43,33 +43,27 @@ export class Provider extends Component {
         </Context.Provider>  
       );
     }
-
     getHero = async (id) => {
       try {
-        // using the getMessage function from /HOCs/data
-        let hero = await this.data.getHero(id);
-        //setting the response to state (Provider component)
+        const hero = await this.data.getHero(id);
+        this.setState({ hero }); // Update state with the fetched hero data
         return hero;
-        // this.state.hero = note;
-      } catch (error) {
-        this.setState({
-          error
-        });
-      }
-    }
-
-    addHero = async (name) => {
-      try {
-        // Add a new hero
-        const newHero = await this.data.addHero(name);
-        // Assuming newHero contains heroId
-        this.setLatestHeroId(newHero.heroId); // Correctly set the latest hero ID
-        return newHero;
       } catch (error) {
         this.setState({ error });
       }
     }
   
+    addHero = async (name) => {
+      try {
+        const newHero = await this.data.addHero(name);
+        this.setLatestHeroId(newHero.heroId);
+        await this.getHero(newHero.heroId); // Fetch and update state with the new hero's details
+        return newHero;
+      } catch (error) {
+        this.setState({ error });
+      }
+    }
+
     setLatestHeroId = (id) => {
       this.setState({ latestHeroId: id });
     }
@@ -92,4 +86,11 @@ export default function withContext( Component ) {
     );
   }
 }
+
+
+
+
+
+
+
 

@@ -1,8 +1,8 @@
-<h3 align="center">Save the kingdom, in the Battle Simulator!</h3>
+<h3 align="center">The kingdom is in trouble, in the Battle Simulator!</h3>
 
 
 <p align="left">
-  The kingdom is in trouble! Create a Hero and start battling enemies to level up, drink potions, and use spells to save the kingdom!
+  Create a Hero and start battling enemies to level up, drink potions, and use spells to save the kingdom!
 </p>
 
 <h3 align="left">Languages and Tools:</h3>

@@ -2,7 +2,7 @@
 
 
 <p align="left">
-  A full-stack game in which the user creates a hero character to battle their way through various enemies and save the kingdom! Learn spells, win potions, and strategize your way to victory!
+  The kingdom is in trouble! Create a Hero and start battling enemies to level up, drink potions, and use spells to save the kingdom!
 </p>
 
 <h3 align="left">Languages and Tools:</h3>

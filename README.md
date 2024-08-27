@@ -11,4 +11,4 @@
 <h3 align="left">To Start: </h3>
 <p>In a code editor, open the /server folder and run <strong>src/main/java/com/example/demo/BattleGameApplication.java</strong></p>
 <p>Open the terminal, navigate to /client and run "npm install"</p>
-<p>Then, run "npm start", and the game should begin in the browser</p>
+<p>Then, run "npm start", and the game should launch in the browser</p>

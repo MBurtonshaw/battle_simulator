@@ -61,6 +61,16 @@ export default class Data {
     }
   }
 
+  async takeDamage(heroId, damage) {
+    try {
+      const response = await this.api(`api/hero/${heroId}/damage`, 'POST', damage);
+      return response;
+    } catch(error) {
+      console.error('Failed to damage hero:', error);
+      throw error;
+    }
+  }
+
   async checkForLevelUp(heroId) {
     try {
       console.log(`Sending level up request for hero ID: ${heroId}`);

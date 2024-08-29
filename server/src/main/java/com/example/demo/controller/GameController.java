@@ -48,7 +48,7 @@ public class GameController {
     }
 
     //////////////////////////////////////////////////////////////////////////////////
-    @RequestMapping(path = "api/hero/{heroId}", method = RequestMethod.POST)
+    @RequestMapping(path = "api/hero/{heroId}/damage", method = RequestMethod.POST)
     public Hero takeDamage(@PathVariable int heroId, @RequestBody int damage) {
         try {
             return heroDao.takeDamage(damage, heroId);

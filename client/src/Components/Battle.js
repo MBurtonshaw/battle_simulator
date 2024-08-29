@@ -12,6 +12,7 @@ function Battle() {
   const [enemyHealth, setEnemyHealth] = useState(0);
   const [loading, setLoading] = useState(true);
   const [victoryHandled, setVictoryHandled] = useState(false);
+  const [isPlayerTurn, setIsPlayerTurn] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,7 +27,7 @@ function Battle() {
       const enemyData = enemies.enemies[enemyId];
       if (enemyData) {
         setEnemy(enemyData);
-        setEnemyHealth(enemyData.healthPoints); 
+        setEnemyHealth(enemyData.healthPoints);
       } else {
         console.error('Enemy not found');
       }
@@ -35,7 +36,7 @@ function Battle() {
     }
 
     getData();
-  }, [heroId, enemyId]); 
+  }, [heroId, enemyId]);
 
   useEffect(() => {
     if (enemyHealth === 0 && enemy) {
@@ -66,14 +67,58 @@ function Battle() {
     }
   }, [enemyHealth, heroId, enemy, actions, navigate]);
 
-  const attack = (damage) => {
-    if (enemy && hero) {
-      setEnemyHealth((prevHealth) => {
-        const newHealth = Math.max(prevHealth - damage, 0);
-        return newHealth;
-      });
+  const attack = async (damage) => {
+    if (isPlayerTurn) {
+      if (enemy && hero) {
+        setEnemyHealth((prevHealth) => {
+          const newHealth = Math.max(prevHealth - damage, 0);
+          return newHealth;
+        });
+      }
+      setIsPlayerTurn(false);
+
     }
   };
+
+  const enemyAttack = useCallback(async () => {
+    if (!isPlayerTurn && enemy && hero) {
+      if (enemyHealth > 0) {
+        try {
+          // Deal damage to the hero
+          await actions.takeDamage(heroId, enemy.damage);
+          
+          // Update hero's health and check for defeat
+          setHero((prevHero) => {
+            const newHealth = Math.max(prevHero.healthPoints - enemy.damage, 0);
+            
+            // Navigate to lose page if hero health drops to 0 or below
+            if (newHealth <= 0) {
+              navigate(`/${heroId}/lose`);
+              return {
+                ...prevHero,
+                healthPoints: newHealth,
+              };
+            }
+            
+            // Continue the battle
+            setIsPlayerTurn(true);
+            return {
+              ...prevHero,
+              healthPoints: newHealth,
+            };
+          });
+        } catch (error) {
+          console.error('Failed to execute enemy attack:', error);
+        }
+      }
+    }
+  }, [isPlayerTurn, enemy, enemyHealth, heroId, actions, navigate]);
+
+  useEffect(() => {
+    if (!isPlayerTurn) {
+      enemyAttack();
+    }
+  }, [isPlayerTurn, enemyAttack]);
 
   if (loading) {
     return (
@@ -97,7 +142,7 @@ function Battle() {
       <div className='col text-center'>
         <img className='battle_img' src={'../../../img/hero_fighter.png'} alt={'The hero, a fantasy fighter with a sword'} />
         <div className='row w-50 m-auto'>
-        <h1>{hero.name}</h1>
+          <h1>{hero.name}</h1>
           <p className='col'>{`Health: ${hero.healthPoints}`}</p>
           <p className='col'>{`Magic: ${hero.magicPoints}`}</p>
         </div>
@@ -105,14 +150,14 @@ function Battle() {
       <div className='col text-center'>
         <img className='battle_img' src={`${enemy.picture}`} alt={`${enemy.name}, a fantasy character posing to fight`} />
         <div className='row w-50 m-auto'>
-        <h1>{enemy.name}</h1>
-        <p>{`Health: ${enemyHealth}`}</p>
+          <h1>{enemy.name}</h1>
+          <p>{`Health: ${enemyHealth}`}</p>
         </div>
       </div>
       <div className='text-center mt-5'>
-            <h5 className='mt-5'>Actions: </h5>
-            <button className='mt-3' onClick={() => attack(hero.damage)}>Attack</button>
-          </div>
+        <h5 className='mt-5'>Actions: </h5>
+        <button className='mt-3' onClick={() => attack(hero.damage)}>Attack</button>
+      </div>
     </div>
   );
 }

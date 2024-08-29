@@ -2,7 +2,7 @@ import { useContext, useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Context } from '../Contexts/context';
 
-function Win() {
+function Lose() {
   const { data, actions } = useContext(Context);
   const [state] = data;
 
@@ -71,7 +71,8 @@ function Win() {
   } else {
     return (
       <div className="Intro">
-        <h1 className='text-center mt-2'>{`${hero.name}, the Hero - has defended the kingdom!`}</h1>
+        <h1 className='text-center mt-2'>{`${hero.name}, the Hero - has been defeated!`}</h1>
+        <h3 className='text-center mt-2'>The kingdom mourns their protector, and the inner council will soon seek another...</h3>
         <div className='mt-3'>
           <img src='../../../img/hero_fighter.png' alt='The hero, a fantasy fighter with a sword' />
         </div>
@@ -91,4 +92,4 @@ function Win() {
   }
 }
 
-export default Win;
+export default Lose;

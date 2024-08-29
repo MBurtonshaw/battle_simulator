@@ -7,6 +7,7 @@ import GameOver from './Components/GameOver';
 import HighScores from './Components/HighScores';
 import LevelUp from './Components/LevelUp';
 import Win from './Components/Win';
+import Lose from './Components/Lose';
 import { Provider } from './Contexts/context';
 
 
@@ -63,6 +64,12 @@ function App() {
               path='/:heroId/win'
               element={
                 <Win />
+              }
+            />
+            <Route
+              path='/:heroId/lose'
+              element={
+                <Lose />
               }
             />
              <Route

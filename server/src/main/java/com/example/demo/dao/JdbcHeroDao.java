@@ -78,4 +78,34 @@ public class JdbcHeroDao implements HeroDao {
             throw new RuntimeException("Error claiming victory", e);
         }
     }
+
+    public Hero checkForLevelUp(int heroId) {
+        Hero hero = getHero(heroId);
+        
+        if (hero.getExpPoints() >= 100) {
+            // Calculate the remainder of experience points after leveling up
+            int remainder = hero.getExpPoints() - 100;
+            
+            // Increase the hero's level
+            hero.setLevel(hero.getLevel() + 1);
+            hero.setExpPoints(remainder);
+            hero.setHealthPoints( (hero.getHealthPoints() * 5) / 2 );
+            hero.setMagicPoints( hero.getMagicPoints() + 10 );
+            hero.setDamage( (int)(Math.round((hero.getDamage() * 3) / 1.8)) );
+            // Update the hero in the database
+            String updateSql = "UPDATE hero SET level = ?, health_points = ?, magic_points = ?, exp_points = ?, damage = ? WHERE hero_id = ?";
+            try {
+                int rowsAffected = jdbcTemplate.update(updateSql, hero.getLevel(), hero.getHealthPoints(), hero.getMagicPoints(), hero.getExpPoints(), hero.getDamage(), heroId);
+                if (rowsAffected > 0) {
+                    return getHero(heroId);  // Return the updated hero
+                } else {
+                    throw new RuntimeException("Hero not found or update failed");
+                }
+            } catch (Exception e) {
+                logger.error("Error updating hero level for ID {}: {}", heroId, e.getMessage());
+                throw new RuntimeException("Error updating hero level", e);
+            }
+        }
+        return hero;  // No level up needed, return the current hero
+    }
 }

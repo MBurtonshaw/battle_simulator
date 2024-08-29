@@ -43,16 +43,27 @@ function Intro() {
     if (hero.level === 1) {
       return (
         <div className="Intro">
-          <h1 className='text-center mt-5'>{`${hero.name}, the Hero!`}</h1>
-          <div className="mt-2">
-            <label className='mt-5' for="heroLevel">Level: </label>
-            <p id="heroLevel" name="heroLevel" className='py-2'>{hero.level}</p>
-            <label className='mt-2' for="heroHealth">Health: </label>
-            <p id="heroHealth" name="heroHealth" className='py-2'>{hero.healthPoints}</p>
-            <label className='mt-2' for="heroMagic">Magic: </label>
-            <p id="heroMagic" name="heroMagic" className='py-2'>{hero.magicPoints}</p>
-            <label className='mt-2' for="heroDamage">Damage: </label>
-            <p id="heroDamage" name="heroDamage" className='py-2'>{hero.damage}</p>
+          <h1 className='text-center mt-2'>{`${hero.name}, the Hero!`}</h1>
+          <div className='mt-4'>
+            <img src='../../../img/hero_fighter.png' alt='The hero, a fantasy fighter with a sword' />
+          </div>
+          <div className="mt-5 row w-50 m-auto">
+            <div className='col'>
+            <label className='fs-4' htmlFor="heroLevel">Level: </label>
+            <p id="heroLevel" name="heroLevel" className='py-2 fs-5'>{hero.level}</p>
+            </div>
+            <div className='col'>
+            <label className='fs-4' htmlFor="heroHealth">Health: </label>
+            <p id="heroHealth" name="heroHealth" className='py-2 fs-5'>{hero.healthPoints}</p>
+            </div>
+            <div className='col'>
+            <label className='fs-4' htmlFor="heroMagic">Magic: </label>
+            <p id="heroMagic" name="heroMagic" className='py-2 fs-5'>{hero.magicPoints}</p>
+            </div>
+            <div className='col'>
+            <label className='fs-4' htmlFor="heroDamage">Damage: </label>
+            <p id="heroDamage" name="heroDamage" className='py-2 fs-5'>{hero.damage}</p>
+            </div>
           </div>
           <button className='m-4 py-1 px-3' onClick={() => navigate(`/${hero.heroId}/enemy/${enemyId}`)}>Next</button>
         </div>
@@ -62,17 +73,17 @@ function Intro() {
         <div className="Intro">
           <h1 className='text-center mt-5'>{`${hero.name} is level ${hero.level}!`}</h1>
           <div className="mt-2">
-            <label className='mt-5' for='heroName'>Name:</label>
+            <label className='mt-5' htmlFor='heroName'>Name:</label>
             <p id='heroName' name='heroName' className='py-1'>{hero.name}</p>
-            <label className='mt-2' for='heroLevel'>Level:</label>
+            <label className='mt-2' htmlFor='heroLevel'>Level:</label>
             <p id='heroLevel' name='heroLevel' className='py-1'>{hero.level}</p>
-            <label className='mt-2' for='heroHealth'>Health:</label>
+            <label className='mt-2' htmlFor='heroHealth'>Health:</label>
             <p id='heroHealth' name='heroHealth' className='py-1'>{hero.healthPoints}</p>
-            <label className='mt-2' for='heroMagic'>Magic:</label>
+            <label className='mt-2' htmlFor='heroMagic'>Magic:</label>
             <p id='heroMagic' name='heroMagic' className='py-1'>{hero.magicPoints}</p>
-            <label className='mt-2' for='heroDamage'>Damage:</label>
+            <label className='mt-2' htmlFor='heroDamage'>Damage:</label>
             <p id='heroDamage' name='heroDamage' className='py-1'>{hero.damage}</p>
-            <label className='mt-2' for='heroExp'>Experience:</label>
+            <label className='mt-2' htmlFor='heroExp'>Experience:</label>
             <p id='heroExp' name='heroExp' className='py-1'>{hero.exp}</p>
             <label className='mt-2' htmlFor="heroSpells">Spells List: </label>
             <ul name="heroSpells">

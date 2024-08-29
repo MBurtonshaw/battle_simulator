@@ -7,4 +7,5 @@ public interface HeroDao {
     Hero addHero(String name);
     Hero takeDamage(int damage, int heroId);
     Hero defeatEnemy(int exp, int heroId);
+    Hero checkForLevelUp(int heroId);
 }

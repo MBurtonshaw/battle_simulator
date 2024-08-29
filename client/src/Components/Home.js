@@ -17,7 +17,7 @@ function Home() {
 
   function startGame() {
     if (regex.test(name)) {
-      actions.addHero(name).then(result => navigate(`/intro/${result.heroId}`));
+      actions.addHero(name).then(result => navigate(`/${result.heroId}`));
     } else {
       window.alert('Please... enter a name.')
       window.alert('...with valid letters only!...')

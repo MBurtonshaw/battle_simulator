@@ -19,11 +19,11 @@ function Enemy() {
   useEffect(() => {getData()}, [])
     return (
       <div className="w-75 m-auto text-center">
-        <div className='mt-5'>
+        <div className='mt-2'>
           <h1 className=''>New Opponent Has Appeared!</h1>
           <div className='mt-5'>
-            <h2 class='p-5'>{`${enemy.name}`}</h2>
-            <img src='' alt={`${enemy.name}, fighting pose`}/>
+            <h2 className=''>{`${enemy.name}`}</h2>
+            <img src={`${enemy.picture}`} alt={`${enemy.name}, fighting pose`}/>
           </div>
           <div className='p-5'>
             <a href={`/${heroId}/battle/${enemyId}`}><button className='py-1 px-3'>To Battle!</button></a>

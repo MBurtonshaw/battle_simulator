@@ -15,3 +15,13 @@ code {
 .Home, .Intro {
   text-align: center;
 }
+
+
+.battle_img {
+  width: 400px;
+}
+
+.nonchalant {
+  list-style: none;
+  margin-left: -2em;
+}

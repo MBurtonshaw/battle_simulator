@@ -35,7 +35,8 @@ export class Provider extends Component {
           addHero: this.addHero,
           setLatestHeroId: this.setLatestHeroId,
           attack: this.attack,
-          defeatEnemy: this.defeatEnemy
+          defeatEnemy: this.defeatEnemy,
+          checkForLevelUp: this.checkForLevelUp
         }
       }
   
@@ -73,6 +74,14 @@ export class Provider extends Component {
     defeatEnemy = async (heroId, exp) => {
       try {
         await this.data.defeatEnemy(heroId, exp);
+      } catch(error) {
+        this.setState({error});
+      }
+    }
+
+    checkForLevelUp = async (heroId) => {
+      try {
+        await this.data.checkForLevelUp(heroId);
       } catch(error) {
         this.setState({error});
       }

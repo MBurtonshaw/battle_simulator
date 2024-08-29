@@ -23,7 +23,7 @@ function App() {
               }
             />
             <Route
-              path='/intro/:id'
+              path='/:id'
               element={
                 <Intro />
               }

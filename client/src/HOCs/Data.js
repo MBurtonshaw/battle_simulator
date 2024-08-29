@@ -60,4 +60,15 @@ export default class Data {
       throw error;
     }
   }
+
+  async checkForLevelUp(heroId) {
+    try {
+      console.log(`Sending level up request for hero ID: ${heroId}`);
+      const response = await this.api(`api/hero/${heroId}/level`, 'POST');
+      return response;
+    } catch (error) {
+      console.error('Failed to check hero for level:', error);
+      throw error;
+    }
+  }
 }

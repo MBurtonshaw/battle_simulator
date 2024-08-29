@@ -33,6 +33,16 @@ public class GameController {
     }
 
     //////////////////////////////////////////////////////////////////////////////////
+    @RequestMapping(path = "api/hero/{heroId}/level", method = RequestMethod.POST)
+    public Hero checkForLevelUp(@PathVariable int heroId) {
+        try {
+            return heroDao.checkForLevelUp(heroId);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Hero not found", e);
+        }
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////
     @RequestMapping(path = "api/hero", method = RequestMethod.POST)
     public Hero addHero(@RequestBody Hero name) {
         try {

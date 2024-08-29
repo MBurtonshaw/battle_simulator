@@ -6,7 +6,8 @@
             "healthPoints" : 20,
             "damage" : 5,
             "expGiven" : 50,
-            "itemDropped" : ""
+            "itemDropped" : "",
+            "picture" : "../../img/1.png"
         },
         {
             "id" : 2,
@@ -14,7 +15,8 @@
             "healthPoints" : 30,
             "damage" : 10,
             "expGiven" : 50,
-            "itemDropped" : "healthPotion"
+            "itemDropped" : "healthPotion",
+            "picture" : "../../img/2.png"
         },
         {
             "id" : 3,
@@ -22,7 +24,8 @@
             "healthPoints" : 45,
             "damage" : 12,
             "expGiven" : 50,
-            "itemDropped" : "magicPotion"
+            "itemDropped" : "magicPotion",
+            "picture" : "../../img/3.png"
         },
         {
             "id" : 4,
@@ -30,7 +33,8 @@
             "healthPoints" : 55,
             "damage" : 16,
             "expGiven" : 50,
-            "itemDropped" : ""
+            "itemDropped" : "",
+            "picture" : "../../img/4.png"
         },
         {
             "id" : 5,
@@ -38,7 +42,8 @@
             "healthPoints" : 65,
             "damage" : 22,
             "expGiven" : 100,
-            "itemDropped" : "healthPotion"
+            "itemDropped" : "healthPotion",
+            "picture" : "../../img/5.png"
         },
         {
             "id" : 6,
@@ -46,7 +51,8 @@
             "healthPoints" : 70,
             "damage" : 26,
             "expGiven" : 50,
-            "itemDropped" : "magicPotion"
+            "itemDropped" : "magicPotion",
+            "picture" : "../../img/6.png"
         },
         {
             "id" : 7,
@@ -54,7 +60,8 @@
             "healthPoints" : 90,
             "damage" : 30,
             "expGiven" : 50,
-            "itemDropped" : "healthPotion"
+            "itemDropped" : "healthPotion",
+            "picture" : "../../img/7.png"
         },
         {
             "id" : 8,
@@ -62,7 +69,8 @@
             "healthPoints" : 110,
             "damage" : 37,
             "expGiven" : 100,
-            "itemDropped" : ""
+            "itemDropped" : "",
+            "picture" : "../../img/8.png"
         },
         {
             "id" : 9,
@@ -70,7 +78,8 @@
             "healthPoints" : 120,
             "damage" : 42,
             "expGiven" : 100,
-            "itemDropped" : ""
+            "itemDropped" : "",
+            "picture" : "../../img/9.png"
         },
         {
             "id" : 10,
@@ -78,7 +87,8 @@
             "healthPoints" : 135,
             "damage" : 50,
             "expGiven" : 0,
-            "itemDropped" : ""
+            "itemDropped" : "",
+            "picture" : "../../img/10.png"
         }
     ]
 }

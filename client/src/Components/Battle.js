@@ -7,6 +7,7 @@ function Battle() {
   const { data, actions } = useContext(Context);
   const { heroId, enemyId } = useParams();
   const [enemy, setEnemy] = useState(null);
+  const [nextEnemyId, setNextEnemyId] = useState(enemyId + 1);
   const [hero, setHero] = useState(null);
   const [enemyHealth, setEnemyHealth] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -15,7 +16,6 @@ function Battle() {
 
   useEffect(() => {
     async function getData() {
-      console.log('Fetching data'); // Debugging log
       try {
         const heroResponse = await actions.getHero(heroId);
         setHero(heroResponse);
@@ -26,7 +26,7 @@ function Battle() {
       const enemyData = enemies.enemies[enemyId];
       if (enemyData) {
         setEnemy(enemyData);
-        setEnemyHealth(enemyData.healthPoints); // Initialize health only once
+        setEnemyHealth(enemyData.healthPoints); 
       } else {
         console.error('Enemy not found');
       }
@@ -35,7 +35,7 @@ function Battle() {
     }
 
     getData();
-  }, [heroId, enemyId]); // Dependencies for useEffect
+  }, [heroId, enemyId]); 
 
   useEffect(() => {
     if (enemyHealth === 0 && enemy) {
@@ -46,9 +46,9 @@ function Battle() {
           if (updatedHero.expPoints >= 100) {
             navigate(`/level_up/${heroId}`);
           } else {
-            navigate(`/intro/${heroId}`);
+            const nextId = Number(enemyId) + 1;
+            navigate(`/${heroId}/enemy/${nextId}`);
           }
-          console.log('Handling victory - Finished'); // Debugging log
         } catch (error) {
           console.error('Failed to handle victory:', error);
         }
@@ -59,7 +59,6 @@ function Battle() {
   }, [enemyHealth, heroId, enemy, actions, navigate]);
 
   const attack = (damage) => {
-    console.log('Attack called'); // Debugging log
     if (enemy && hero) {
       setEnemyHealth((prevHealth) => {
         const newHealth = Math.max(prevHealth - damage, 0);
@@ -86,22 +85,26 @@ function Battle() {
 
 
   return (
-    <div className="row align-items-center w-75 m-auto">
+    <div className="row align-items-center w-75 m-auto mt-5">
       <div className='col text-center'>
-        <h1>{hero.name}</h1>
+        <img className='battle_img' src={'../../../img/hero_fighter.png'} alt={'The hero, a fantasy fighter with a sword'} />
         <div className='row w-50 m-auto'>
+        <h1>{hero.name}</h1>
           <p className='col'>{`Health: ${hero.healthPoints}`}</p>
           <p className='col'>{`Magic: ${hero.magicPoints}`}</p>
-          <div>
-            <h5>Actions: </h5>
-            <button onClick={() => attack(hero.damage)}>Attack</button>
-          </div>
         </div>
       </div>
       <div className='col text-center'>
+        <img className='battle_img' src={`${enemy.picture}`} alt={`${enemy.name}, a fantasy character posing to fight`} />
+        <div className='row w-50 m-auto'>
         <h1>{enemy.name}</h1>
         <p>{`Health: ${enemyHealth}`}</p>
+        </div>
       </div>
+      <div className='text-center mt-5'>
+            <h5 className='mt-5'>Actions: </h5>
+            <button className='mt-3' onClick={() => attack(hero.damage)}>Attack</button>
+          </div>
     </div>
   );
 }

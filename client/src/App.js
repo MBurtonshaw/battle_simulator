@@ -6,6 +6,7 @@ import Battle from './Components/Battle';
 import GameOver from './Components/GameOver';
 import HighScores from './Components/HighScores';
 import LevelUp from './Components/LevelUp';
+import Win from './Components/Win';
 import { Provider } from './Contexts/context';
 
 
@@ -56,6 +57,18 @@ function App() {
               path='/level_up/:heroId'
               element={
                 <LevelUp />
+              }
+            />
+            <Route
+              path='/:heroId/win'
+              element={
+                <Win />
+              }
+            />
+             <Route
+              path='/high_scores'
+              element={
+                <HighScores />
               }
             />
           </Routes>

@@ -71,4 +71,14 @@ export default class Data {
       throw error;
     }
   }
+
+  async getHighScores() {
+    try {
+      const response = await this.api(`api/score/high`, 'GET');
+      return response;
+    } catch (error) {
+      console.error('Failed to retrieve high scores:', error);
+      throw error;
+    }
+  }
 }

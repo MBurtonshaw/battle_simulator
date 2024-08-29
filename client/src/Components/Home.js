@@ -42,6 +42,11 @@ function Home() {
           />
           <div className='w-100 m-auto p-5'>
           <button className='py-1 px-4' onClick={() => { startGame() }}>Start Game</button>
+
+          </div>
+          <div className='w-100 m-auto p-5'>
+          <button className='py-1 px-4' onClick={() => { navigate('/high_scores') }}>High Scores</button>
+
           </div>
 
       </div>

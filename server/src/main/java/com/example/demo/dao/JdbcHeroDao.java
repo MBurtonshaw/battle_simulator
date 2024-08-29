@@ -1,6 +1,10 @@
 package com.example.demo.dao;
 
 import com.example.demo.model.Hero;
+import com.example.demo.model.Score;
+
+import java.util.List;
+import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -16,6 +20,7 @@ public class JdbcHeroDao implements HeroDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    @Override
     public Hero getHero(int heroId) {
         Hero hero = new Hero();
         String heroSql = "SELECT hero_id, name, level, health_points, magic_points, exp_points, damage, enemies_defeated " +
@@ -38,6 +43,7 @@ public class JdbcHeroDao implements HeroDao {
         return hero;
     }
 
+    @Override
     public Hero addHero(String name) {
         String newHeroSql = "INSERT INTO hero VALUES(DEFAULT, ?, 1, 50, 20, 0, 10, 0) RETURNING hero_id;";
         int heroId = jdbcTemplate.queryForObject(newHeroSql, Integer.class, name);
@@ -47,6 +53,7 @@ public class JdbcHeroDao implements HeroDao {
         return newHero;
     }
 
+    @Override
     public Hero takeDamage(int damage, int heroId) {
         Hero updatedHero = null;
         String damageSql = "UPDATE hero SET health_points = health_points - ? WHERE hero_id = ?;";
@@ -63,6 +70,7 @@ public class JdbcHeroDao implements HeroDao {
         return updatedHero;
     }
 
+    @Override
     public Hero defeatEnemy(int exp, int heroId) {
         String victorySql = "UPDATE hero SET enemies_defeated = enemies_defeated + 1, exp_points = exp_points + ? WHERE hero_id = ?;";
         try {
@@ -79,6 +87,7 @@ public class JdbcHeroDao implements HeroDao {
         }
     }
 
+    @Override
     public Hero checkForLevelUp(int heroId) {
         Hero hero = getHero(heroId);
         
@@ -107,5 +116,25 @@ public class JdbcHeroDao implements HeroDao {
             }
         }
         return hero;  // No level up needed, return the current hero
+    }
+
+    @Override
+    public List<Score> getHighScores() {
+        List<Score> highScores = new ArrayList<>();
+        String scoreSql = "SELECT name, level, enemies_defeated FROM hero WHERE enemies_defeated = 10;";
+        try {
+            SqlRowSet results = jdbcTemplate.queryForRowSet(scoreSql);
+            while (results.next()) {
+                Score newScore = new Score();
+                newScore.setScore(results.getInt("enemies_defeated"));
+                newScore.setHeroName(results.getString("name"));
+                newScore.setHeroLevel(results.getInt("level"));
+                highScores.add(newScore);
+            }
+        } catch (Exception e) {
+            logger.error("Error retrieving high scores: {}", e.getMessage());
+            throw new RuntimeException("Error retrieving high scores", e);
+        }
+        return highScores;
     }
 }

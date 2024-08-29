@@ -1,25 +1,20 @@
 package com.example.demo.controller;
 
-import com.example.demo.dao.ScoreDao;
 import com.example.demo.model.Hero;
 import com.example.demo.model.Score;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import com.example.demo.dao.HeroDao;
-import com.example.demo.model.Hero;
-
 import java.util.List;
 
 @RestController
 @CrossOrigin
 public class GameController {
     private final HeroDao heroDao;
-    private final ScoreDao scoreDao;
 
-    public GameController(HeroDao heroDao, ScoreDao scoreDao) {
+    public GameController(HeroDao heroDao) {
         this.heroDao = heroDao;
-        this.scoreDao = scoreDao;
     }
 
     //////////////////////////////////////////////////////////////////////////////////
@@ -73,12 +68,12 @@ public class GameController {
     }
 
     //////////////////////////////////////////////////////////////////////////////////
-    @RequestMapping(path = "api/score/{heroId}", method = RequestMethod.GET)
-    public Score getScoreByHero(@PathVariable int heroId) {
+    @RequestMapping(path = "api/score/high", method = RequestMethod.GET)
+    public List<Score> getHighScores() {
         try {
-            return scoreDao.getScoreByHero(heroId);
+            return heroDao.getHighScores();
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Score not found", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving high scores", e);
         }
     }
 

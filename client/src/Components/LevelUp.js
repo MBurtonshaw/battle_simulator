@@ -9,19 +9,19 @@ function LevelUp() {
   const [hero, setHero] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { heroId } = useParams(); 
+  const { heroId } = useParams();
   const navigate = useNavigate();
   const [enemyId, setEnemyId] = useState('');
 
   async function getData() {
     setLoading(true);
-    setError(null); 
+    setError(null);
     try {
       let heroData = await actions.getHero(heroId);
 
       if (heroData) {
-        heroData.spellsList = ['kfjsdlkf', 'kasdjfkdaf'];
-        heroData.inventory = ['kasijdfbklasd', 'klasjdhflkajsdfsd', 'asldjkfbnsjkldn', 'lasjdhfklsjafjlsd'];
+        heroData.spellsList = [];
+        heroData.inventory = [];
         setHero(heroData);
 
         if (heroData.expPoints >= 100) {
@@ -67,6 +67,15 @@ function LevelUp() {
     }
     return <li className='nonchalant'>Inventory is empty</li>; // Optional fallback
   }
+
+  function determineNav() {
+    if (hero.enemiesDefeated >= 10) {
+      return navigate(`/${hero.heroId}/win`);
+    } else {
+      return navigate(`/${hero.heroId}/enemy/${enemyId}`);
+    }
+  }
+      
 
   if (error) {
     return (
@@ -128,7 +137,7 @@ function LevelUp() {
             </ul>
           </div>
         </div>
-        <button className='m-3 py-1 px-3' onClick={() => navigate(`/${hero.heroId}/enemy/${enemyId}`)}>Next</button>
+        <button className='m-3 py-1 px-3' onClick={() => determineNav()}>Next</button>
       </div>
     );
   }

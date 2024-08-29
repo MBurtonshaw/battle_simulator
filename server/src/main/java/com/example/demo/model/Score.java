@@ -2,6 +2,8 @@ package com.example.demo.model;
 
 public class Score {
     private int score_id;
+    private String heroName;
+    private int heroLevel;
     private int score;
 
     public int getScore_id() {
@@ -20,8 +22,24 @@ public class Score {
         this.score = score;
     }
 
+    public String getHeroName() {
+        return heroName;
+    }
 
+    public void setHeroName(String heroName) {
+        this.heroName = heroName;
+    }
+
+    public int getHeroLevel() {
+        return heroLevel;
+    }
+
+    public void setHeroLevel(int herolevel) {
+        this.heroLevel = herolevel;
+    }
+
+    @Override
     public String toString() {
-        return "Hero " + getScore_id() + " has a score of " + getScore()+ "\n";
+        return "Hero " + getHeroName() + ", level " + getHeroLevel() + ", has a score of " + getScore()+ "\n";
     }
 }

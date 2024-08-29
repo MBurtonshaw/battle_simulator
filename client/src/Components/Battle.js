@@ -43,11 +43,19 @@ function Battle() {
         try {
           await actions.defeatEnemy(heroId, enemy.expGiven);
           const updatedHero = await actions.getHero(heroId);
-          if (updatedHero.expPoints >= 100) {
-            navigate(`/level_up/${heroId}`);
+          if (updatedHero.enemiesDefeated >= 10) {
+            if (updatedHero.expPoints >= 100) {
+              navigate(`/level_up/${heroId}`);
+            } else {
+              navigate(`/${heroId}/win`);
+            }
           } else {
-            const nextId = Number(enemyId) + 1;
-            navigate(`/${heroId}/enemy/${nextId}`);
+            if (updatedHero.expPoints >= 100) {
+              navigate(`/level_up/${heroId}`);
+            } else {
+              const nextId = Number(enemyId) + 1;
+              navigate(`/${heroId}/enemy/${nextId}`);
+            }
           }
         } catch (error) {
           console.error('Failed to handle victory:', error);

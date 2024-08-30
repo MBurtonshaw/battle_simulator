@@ -26,7 +26,7 @@ function Enemy() {
             <img src={`${enemy.picture}`} alt={`${enemy.name}, fighting pose`}/>
           </div>
           <div className='p-5'>
-            <a href={`/${heroId}/battle/${enemyId}`}><button className='py-1 px-3'>To Battle!</button></a>
+            <a href={`/${heroId}/battle/${enemyId}`}><button className='green_button'>To Battle!</button></a>
           </div>
         </div>
       </div>

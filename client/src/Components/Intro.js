@@ -65,7 +65,7 @@ function Intro() {
             <p id="heroDamage" name="heroDamage" className='py-2 fs-5'>{hero.damage}</p>
             </div>
           </div>
-          <button className='m-4 py-1 px-3' onClick={() => navigate(`/${hero.heroId}/enemy/${enemyId}`)}>Next</button>
+          <button className='m-4 green_button' onClick={() => navigate(`/${hero.heroId}/enemy/${enemyId}`)}>Next</button>
         </div>
       );
     } else {
@@ -96,7 +96,7 @@ function Intro() {
             <label className='mt-2' htmlFor="heroScore">Enemies Defeated: </label>
             <p name="heroScore" id="heroScore">{hero.enemies_defeated}</p>
           </div>
-          <button className='m-4 py-1 px-3' onClick={() => navigate(`/${hero.heroId}/enemy/${enemyId}`)}>Next</button>
+          <button className='m-4 green_button' onClick={() => navigate(`/${hero.heroId}/enemy/${enemyId}`)}>Next</button>
         </div>
       );
     }

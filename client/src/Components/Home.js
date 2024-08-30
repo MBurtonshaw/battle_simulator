@@ -41,11 +41,11 @@ function Home() {
             maxLength={14} // Limit input length on the client side
           />
           <div className='w-100 m-auto p-5'>
-          <button className='py-1 px-4' onClick={() => { startGame() }}>Start Game</button>
+          <button className='green_button' onClick={() => { startGame() }}>Start Game</button>
 
           </div>
           <div className='w-100 m-auto p-5'>
-          <button className='py-1 px-4' onClick={() => { navigate('/high_scores') }}>High Scores</button>
+          <button className='blue_button' onClick={() => { navigate('/high_scores') }}>High Scores</button>
 
           </div>
 

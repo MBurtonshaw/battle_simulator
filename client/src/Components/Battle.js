@@ -7,11 +7,9 @@ function Battle() {
   const { data, actions } = useContext(Context);
   const { heroId, enemyId } = useParams();
   const [enemy, setEnemy] = useState(null);
-  const [nextEnemyId, setNextEnemyId] = useState(enemyId + 1);
   const [hero, setHero] = useState(null);
   const [enemyHealth, setEnemyHealth] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [victoryHandled, setVictoryHandled] = useState(false);
   const [isPlayerTurn, setIsPlayerTurn] = useState(true);
   const [isEnemyFrozen, setIsEnemyFrozen] = useState(false);
   const navigate = useNavigate();
@@ -27,6 +25,7 @@ function Battle() {
         } else {
           heroResponse.spellsList = ['Freeze', 'Fire'];
         }
+        heroResponse.inventory = [];
         setHero(heroResponse);
       } catch (error) {
         console.error('Failed to fetch hero data', error);
@@ -95,7 +94,7 @@ function Battle() {
           try {
             // Deal damage to the hero
             await actions.takeDamage(heroId, enemy.damage);
-
+            await actions.getHero(heroId);
             // Update hero's health and check for defeat
             setHero((prevHero) => {
               const newHealth = Math.max(prevHero.healthPoints - enemy.damage, 0);
@@ -136,7 +135,6 @@ function Battle() {
 
   const castFreezeSpell = useCallback(async () => {
     if (hero.magicPoints >= 10) {
-      hero.magicPoints -= 10;
       await actions.castFreezeSpell(heroId, 10);
       let updatedHero = await actions.getHero(heroId);
       setHero(updatedHero);
@@ -149,7 +147,6 @@ function Battle() {
 
   const castFireSpell = useCallback(async () => {
     if (hero.magicPoints >= 15) {
-      hero.magicPoints -= 15;
       await actions.castFireSpell(heroId, 15);
       let updatedHero = await actions.getHero(heroId);
       setHero(updatedHero);
@@ -163,7 +160,7 @@ function Battle() {
   function buttonPlacer() {
     if (hero.level === 1) {
       return (
-        <button className='mt-3' onClick={() => attack(hero.damage)}>Attack</button>
+        <button id='attack_button' className='mt-1 action_button' onClick={() => attack(hero.damage)}>Attack</button>
       );
     } else if (hero.level === 2) {
       if (hero.magicPoints >= 10) {

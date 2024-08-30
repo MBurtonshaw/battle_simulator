@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
@@ -14,6 +16,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class JdbcHeroDao implements HeroDao {
     private static final Logger logger = LoggerFactory.getLogger(JdbcHeroDao.class);
+    
+    @Autowired
     private final JdbcTemplate jdbcTemplate;
 
     public JdbcHeroDao(JdbcTemplate jdbcTemplate) {
@@ -23,7 +27,8 @@ public class JdbcHeroDao implements HeroDao {
     @Override
     public Hero getHero(int heroId) {
         Hero hero = new Hero();
-        String heroSql = "SELECT hero_id, name, level, health_points, magic_points, exp_points, damage, enemies_defeated " +
+        String heroSql = "SELECT hero_id, name, level, health_points, magic_points, exp_points, damage, enemies_defeated "
+                +
                 "FROM hero WHERE hero_id = ?;";
         try {
             SqlRowSet results = jdbcTemplate.queryForRowSet(heroSql, heroId);
@@ -58,12 +63,12 @@ public class JdbcHeroDao implements HeroDao {
         Hero updatedHero = null;
         String damageSql = "UPDATE hero SET health_points = health_points - ? WHERE hero_id = ?;";
         try {
-           int numberOfRows = jdbcTemplate.update(damageSql, damage, heroId);
-           if (numberOfRows == 0) {
+            int numberOfRows = jdbcTemplate.update(damageSql, damage, heroId);
+            if (numberOfRows == 0) {
                 throw new Exception("Could not update hero's health");
-           } else {
+            } else {
                 updatedHero = getHero(heroId);
-           }
+            }
         } catch (Exception e) {
             logger.error("Error damaging hero with ID {}: {}", heroId, e.getMessage());
         }
@@ -90,23 +95,24 @@ public class JdbcHeroDao implements HeroDao {
     @Override
     public Hero checkForLevelUp(int heroId) {
         Hero hero = getHero(heroId);
-        
+
         if (hero.getExpPoints() >= 100) {
             // Calculate the remainder of experience points after leveling up
             int remainder = hero.getExpPoints() - 100;
-            
+
             // Increase the hero's level
             hero.setLevel(hero.getLevel() + 1);
             hero.setExpPoints(remainder);
-            hero.setHealthPoints( (hero.getHealthPoints() * 5) / 2 );
-            hero.setMagicPoints( hero.getMagicPoints() + 10 );
-            hero.setDamage( (int)(Math.round((hero.getDamage() * 3) / 1.8)) );
+            hero.setHealthPoints((hero.getHealthPoints() * 5) / 2);
+            hero.setMagicPoints(hero.getMagicPoints() + 10);
+            hero.setDamage((int) (Math.round((hero.getDamage() * 3) / 1.8)));
             // Update the hero in the database
             String updateSql = "UPDATE hero SET level = ?, health_points = ?, magic_points = ?, exp_points = ?, damage = ? WHERE hero_id = ?";
             try {
-                int rowsAffected = jdbcTemplate.update(updateSql, hero.getLevel(), hero.getHealthPoints(), hero.getMagicPoints(), hero.getExpPoints(), hero.getDamage(), heroId);
+                int rowsAffected = jdbcTemplate.update(updateSql, hero.getLevel(), hero.getHealthPoints(),
+                        hero.getMagicPoints(), hero.getExpPoints(), hero.getDamage(), heroId);
                 if (rowsAffected > 0) {
-                    return getHero(heroId);  // Return the updated hero
+                    return getHero(heroId); // Return the updated hero
                 } else {
                     throw new RuntimeException("Hero not found or update failed");
                 }
@@ -115,7 +121,83 @@ public class JdbcHeroDao implements HeroDao {
                 throw new RuntimeException("Error updating hero level", e);
             }
         }
-        return hero;  // No level up needed, return the current hero
+        return hero; // No level up needed, return the current hero
+    }
+
+    @Override
+    public Hero castFreezeSpell(int heroId, int magicPoints) {
+        if (magicPoints <= 0) {
+            throw new IllegalArgumentException("Magic points must be positive.");
+        }
+
+        // Retrieve the hero
+        Hero hero = getHero(heroId);
+        if (hero == null) {
+            throw new IllegalArgumentException("Hero not found with ID: " + heroId);
+        }
+
+        if (hero.getMagicPoints() < magicPoints) {
+            throw new IllegalArgumentException("Not enough magic points to cast freeze spell.");
+        }
+
+        // Update the hero's magic points in the database
+        String freezeSql = "UPDATE hero SET magic_points = magic_points - ? WHERE hero_id = ?;";
+        try {
+            int rowsAffected = jdbcTemplate.update(freezeSql, magicPoints, heroId);
+            if (rowsAffected > 0) {
+                // Update in-memory state if the database update is successful
+                hero.setMagicPoints(hero.getMagicPoints() - magicPoints);
+                return hero;
+            } else {
+                throw new RuntimeException("Could not cast freeze spell; update error");
+            }
+        } catch (DataAccessException dae) {
+            // Log specific database-related exceptions
+            logger.error("Database error casting freeze spell for ID {}: {}", heroId, dae.getMessage());
+            throw new RuntimeException("Database error updating hero", dae);
+        } catch (Exception e) {
+            // Log general exceptions
+            logger.error("Error casting freeze spell for ID {}: {}", heroId, e.getMessage());
+            throw new RuntimeException("Error updating hero level", e);
+        }
+    }
+
+    @Override
+    public Hero castFireSpell(int heroId, int magicPoints) {
+        if (magicPoints <= 0) {
+            throw new IllegalArgumentException("Magic points must be positive.");
+        }
+
+        // Retrieve the hero
+        Hero hero = getHero(heroId);
+        if (hero == null) {
+            throw new IllegalArgumentException("Hero not found with ID: " + heroId);
+        }
+
+        if (hero.getMagicPoints() < magicPoints) {
+            throw new IllegalArgumentException("Not enough magic points to cast fire spell.");
+        }
+
+        // Update the hero's magic points in the database
+        String fireSql = "UPDATE hero SET magic_points = magic_points - ? WHERE hero_id = ?;";
+        try {
+            int rowsAffected = jdbcTemplate.update(fireSql, magicPoints, heroId);
+            if (rowsAffected > 0) {
+                // Update in-memory state if the database update is successful
+                hero.setMagicPoints(hero.getMagicPoints() - magicPoints);
+                return hero;
+            } else {
+                throw new RuntimeException("Could not cast fire spell; update error");
+            }
+        } catch (DataAccessException dae) {
+            // Log specific database-related exceptions
+            logger.error("Database error casting freeze spell for ID {}: {}", heroId, dae.getMessage());
+            throw new RuntimeException("Database error updating hero", dae);
+        } catch (Exception e) {
+            // Log general exceptions
+            logger.error("Error casting freeze spell for ID {}: {}", heroId, e.getMessage());
+            throw new RuntimeException("Error updating hero level", e);
+        }
     }
 
     @Override

@@ -68,6 +68,26 @@ public class GameController {
     }
 
     //////////////////////////////////////////////////////////////////////////////////
+    @RequestMapping(path = "api/hero/{heroId}/freeze", method = RequestMethod.POST)
+    public Hero castFreezeSpell(@PathVariable int heroId, @RequestBody int magicPoints) {
+        try {
+            return heroDao.castFreezeSpell(heroId, magicPoints);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Score not found", e);
+        }
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////
+    @RequestMapping(path = "api/hero/{heroId}/fire", method = RequestMethod.POST)
+    public Hero castFireSpell(@PathVariable int heroId, @RequestBody int magicPoints) {
+        try {
+            return heroDao.castFireSpell(heroId, magicPoints);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Score not found", e);
+        }
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////
     @RequestMapping(path = "api/score/high", method = RequestMethod.GET)
     public List<Score> getHighScores() {
         try {

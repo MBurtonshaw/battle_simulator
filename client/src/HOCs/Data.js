@@ -71,6 +71,26 @@ export default class Data {
     }
   }
 
+  async castFreezeSpell(heroId, magicPoints) {
+    try {
+      const response = await this.api(`api/hero/${heroId}/freeze`, 'POST', magicPoints);
+      return response;
+    } catch(error) {
+      console.error('Failed to damage hero:', error);
+      throw error;
+    }
+  }
+
+  async castFireSpell(heroId, magicPoints) {
+    try {
+      const response = await this.api(`api/hero/${heroId}/fire`, 'POST', magicPoints);
+      return response;
+    } catch(error) {
+      console.error('Failed to damage hero:', error);
+      throw error;
+    }
+  }
+
   async checkForLevelUp(heroId) {
     try {
       console.log(`Sending level up request for hero ID: ${heroId}`);

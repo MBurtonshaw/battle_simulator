@@ -18,10 +18,15 @@ function LevelUp() {
     setError(null);
     try {
       let heroData = await actions.getHero(heroId);
-
+      console.log(heroData)
       if (heroData) {
-        heroData.spellsList = [];
-        heroData.inventory = [];
+        if (heroData.level === 1) {
+          heroData.spellsList = [];
+        } else if (heroData.level === 2) {
+          heroData.spellsList = ['Freeze'];
+        } else {
+          heroData.spellsList = ['Freeze', 'Fire'];
+        }
         setHero(heroData);
 
         if (heroData.expPoints >= 100) {
@@ -51,12 +56,26 @@ function LevelUp() {
   }, [heroId]);
 
   function spellsList() {
-    if (hero && hero.spellsList && hero.spellsList.length > 0) {
-      return hero.spellsList.map((spell, index) => (
-        <li key={index} className='nonchalant'>{spell}</li>
-      ));
+    if (hero.level === 1) {
+      return (
+        <div>
+          <li className='nonchalant'>No spells available</li>
+        </div>
+      );
+    } else if (hero.level === 2) {
+      return (
+        <div>
+          <li className='nonchalant'>Freeze Spell</li>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <li className='nonchalant'>Freeze Spell</li>
+          <li className='nonchalant'>Fire Spell</li>
+        </div>
+      );
     }
-    return <li className='nonchalant'>No spells available</li>; // Optional fallback
   }
 
   function inventory() {
@@ -75,7 +94,7 @@ function LevelUp() {
       return navigate(`/${hero.heroId}/enemy/${enemyId}`);
     }
   }
-      
+
 
   if (error) {
     return (

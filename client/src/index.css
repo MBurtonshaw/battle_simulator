@@ -25,3 +25,47 @@ code {
   list-style: none;
   margin-left: -2em;
 }
+
+#attack_button {
+  background-color: rgb(104, 46, 137);
+  color: white;
+}
+
+#freeze_button {
+  background-color: rgb(46, 148, 163);
+  color: white;
+}
+
+#freeze_button_inactive {
+  color: black;
+  border: none;
+  padding: 0.75em 3.5em;
+  border: 2px solid gainsboro;
+  border-radius: 7px;
+}
+
+#fire_button {
+  background-color: rgb(198, 102, 46);
+  color: white;
+}
+
+#fire_button_inactive {
+  color: black;
+  border: none;
+  padding: 0.75em 3.5em;
+  border: 2px solid gainsboro;
+  border-radius: 7px;
+}
+
+.action_button {
+  border: none;
+  padding: 0.75em 3.5em;
+  border-radius: 7px;
+}
+
+.inactive_button {
+  border: none;
+  padding: 0.75em 3.5em;
+  border: 2px solid gainsboro;
+  border-radius: 7px;
+}

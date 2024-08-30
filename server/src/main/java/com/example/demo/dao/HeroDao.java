@@ -12,4 +12,6 @@ public interface HeroDao {
     Hero defeatEnemy(int exp, int heroId);
     Hero checkForLevelUp(int heroId);
     List<Score> getHighScores();
+    Hero castFreezeSpell(int heroId, int magicPoints);
+    Hero castFireSpell(int heroId, int magicPoints);
 }

@@ -13,12 +13,20 @@ function Battle() {
   const [loading, setLoading] = useState(true);
   const [victoryHandled, setVictoryHandled] = useState(false);
   const [isPlayerTurn, setIsPlayerTurn] = useState(true);
+  const [isEnemyFrozen, setIsEnemyFrozen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     async function getData() {
       try {
         const heroResponse = await actions.getHero(heroId);
+        if (heroResponse.level === 1) {
+          heroResponse.spellsList = [];
+        } else if (heroResponse.level === 2) {
+          heroResponse.spellsList = ['Freeze'];
+        } else {
+          heroResponse.spellsList = ['Freeze', 'Fire'];
+        }
         setHero(heroResponse);
       } catch (error) {
         console.error('Failed to fetch hero data', error);
@@ -83,42 +91,150 @@ function Battle() {
   const enemyAttack = useCallback(async () => {
     if (!isPlayerTurn && enemy && hero) {
       if (enemyHealth > 0) {
-        try {
-          // Deal damage to the hero
-          await actions.takeDamage(heroId, enemy.damage);
-          
-          // Update hero's health and check for defeat
-          setHero((prevHero) => {
-            const newHealth = Math.max(prevHero.healthPoints - enemy.damage, 0);
-            
-            // Navigate to lose page if hero health drops to 0 or below
-            if (newHealth <= 0) {
-              navigate(`/${heroId}/lose`);
+        if (!isEnemyFrozen) {
+          try {
+            // Deal damage to the hero
+            await actions.takeDamage(heroId, enemy.damage);
+
+            // Update hero's health and check for defeat
+            setHero((prevHero) => {
+              const newHealth = Math.max(prevHero.healthPoints - enemy.damage, 0);
+
+              // Navigate to lose page if hero health drops to 0 or below
+              if (newHealth <= 0) {
+                navigate(`/${heroId}/lose`);
+                return {
+                  ...prevHero,
+                  healthPoints: newHealth,
+                };
+              }
+
+              // Continue the battle
+              setIsPlayerTurn(true);
               return {
                 ...prevHero,
                 healthPoints: newHealth,
               };
-            }
-            
-            // Continue the battle
-            setIsPlayerTurn(true);
-            return {
-              ...prevHero,
-              healthPoints: newHealth,
-            };
-          });
-        } catch (error) {
-          console.error('Failed to execute enemy attack:', error);
+            });
+          } catch (error) {
+            console.error('Failed to execute enemy attack:', error);
+          }
+        } else {
+          setIsEnemyFrozen(false);
+          setIsPlayerTurn(true);
         }
+
       }
     }
-  }, [isPlayerTurn, enemy, enemyHealth, heroId, actions, navigate]);
+  }, [enemy, enemyHealth, heroId, actions, navigate]);
 
   useEffect(() => {
     if (!isPlayerTurn) {
       enemyAttack();
     }
   }, [isPlayerTurn, enemyAttack]);
+
+  const castFreezeSpell = useCallback(async () => {
+    if (hero.magicPoints >= 10) {
+      hero.magicPoints -= 10;
+      await actions.castFreezeSpell(heroId, 10);
+      let updatedHero = await actions.getHero(heroId);
+      setHero(updatedHero);
+      setIsEnemyFrozen(true);
+    } else {
+      window.alert("Not enough magic points to cast freeze spell!");
+    }
+  }
+  )
+
+  const castFireSpell = useCallback(async () => {
+    if (hero.magicPoints >= 15) {
+      hero.magicPoints -= 15;
+      await actions.castFireSpell(heroId, 15);
+      let updatedHero = await actions.getHero(heroId);
+      setHero(updatedHero);
+      setEnemyHealth(0);
+    } else {
+      window.alert("Not enough magic points to cast fire spell!");
+    }
+  }
+  )
+
+  function buttonPlacer() {
+    if (hero.level === 1) {
+      return (
+        <button className='mt-3' onClick={() => attack(hero.damage)}>Attack</button>
+      );
+    } else if (hero.level === 2) {
+      if (hero.magicPoints >= 10) {
+        return (
+          <div>
+            <div>
+              <button id='attack_button' className='mt-1 action_button' onClick={() => attack(hero.damage)}>Attack</button>
+            </div>
+            <div>
+              <button id='freeze_button' className='mt-1 action_button' onClick={() => castFreezeSpell()}>Freeze Spell - 10mp</button>
+            </div>
+          </div>
+        );
+      } else {
+        return (
+          <div>
+            <div>
+              <button id='attack_button' className='mt-1 action_button' onClick={() => attack(hero.damage)}>Attack</button>
+            </div>
+            <div>
+              <button id='freeze_button_inactive' className='mt-1 inactive_button' onClick={() => castFreezeSpell()}>Freeze Spell - 10mp</button>
+            </div>
+          </div>
+        );
+      }
+    } else {
+      if (hero.magicPoints >= 15) {
+        return (
+          <div>
+            <div>
+              <button id='attack_button' className='mt-1 action_button' onClick={() => attack(hero.damage)}>Attack</button>
+            </div>
+            <div>
+              <button id='freeze_button' className='mt-1 action_button' onClick={() => castFreezeSpell()}>Freeze Spell - 10mp</button>
+            </div>
+            <div>
+              <button id='fire_button' className='mt-1 action_button' onClick={() => castFireSpell()}>Fire Spell - 15mp</button>
+            </div>
+          </div>
+        );
+      } else if (hero.magicPoints >= 10 && hero.magicPoints < 15) {
+        return (
+          <div>
+            <div>
+              <button id='attack_button' className='mt-1 action_button' onClick={() => attack(hero.damage)}>Attack</button>
+            </div>
+            <div>
+              <button id='freeze_button' className='mt-1 action_button' onClick={() => castFreezeSpell()}>Freeze Spell - 10mp</button>
+            </div>
+            <div>
+              <button id='fire_button_inactive' className='mt-1 inactive_button' onClick={() => castFireSpell()}>Fire Spell - 15mp</button>
+            </div>
+          </div>
+        );
+      } else {
+        return (
+          <div>
+            <div>
+              <button id='attack_button' className='mt-1 action_button' onClick={() => attack(hero.damage)}>Attack</button>
+            </div>
+            <div>
+              <button id='freeze_button_inactive' className='mt-1 inactive_button' onClick={() => castFreezeSpell()}>Freeze Spell - 10mp</button>
+            </div>
+            <div>
+              <button id='fire_button_inactive' className='mt-1 inactive_button' onClick={() => castFireSpell()}>Fire Spell - 15mp</button>
+            </div>
+          </div>
+        );
+      }
+    }
+  }
 
   if (loading) {
     return (
@@ -156,7 +272,7 @@ function Battle() {
       </div>
       <div className='text-center mt-5'>
         <h5 className='mt-5'>Actions: </h5>
-        <button className='mt-3' onClick={() => attack(hero.damage)}>Attack</button>
+        {buttonPlacer()}
       </div>
     </div>
   );

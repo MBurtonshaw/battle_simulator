@@ -72,21 +72,22 @@ function Lose() {
     return (
       <div className="Intro">
         <h1 className='text-center mt-2'>{`${hero.name}, the Hero - has been defeated!`}</h1>
-        <h3 className='text-center mt-2'>The kingdom mourns their protector, and the inner council will soon seek another...</h3>
+        <h3 className='text-center mt-2'>The kingdom mourns their protector...</h3>
+        <h3 className='text-center mt-2'>and the inner council must soon seek another.</h3>
         <div className='mt-3'>
           <img src='../../../img/hero_fighter.png' alt='The hero, a fantasy fighter with a sword' />
         </div>
-        <div className="mt-3 w-50 m-auto">
+        <div className="mt-2 w-50 m-auto">
           <div className=''>
             <label className='fs-4' htmlFor="heroLevel">Level: </label>
-            <p id="heroLevel" name="heroLevel" className='py-2 fs-5'>{hero.level}</p>
+            <p id="heroLevel" name="heroLevel" className='py-1 fs-5'>{hero.level}</p>
           </div>
           <div className=''>
             <label className='fs-4' htmlFor="heroScore">Enemies Defeated: </label>
-            <p id="heroScore" name="heroScore" className='py-2 fs-5'>{hero.enemiesDefeated}</p>
+            <p id="heroScore" name="heroScore" className='py-1 fs-5'>{hero.enemiesDefeated}</p>
           </div>
         </div>
-        <button className='m-3 py-1 px-3' onClick={() => navigate(`/high_scores`)}>Next</button>
+        <button className='m-2 py-1 px-3' onClick={() => navigate(`/high_scores`)}>Next</button>
       </div>
     );
   }

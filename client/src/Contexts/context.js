@@ -38,7 +38,9 @@ export class Provider extends Component {
           defeatEnemy: this.defeatEnemy,
           checkForLevelUp: this.checkForLevelUp,
           getHighScores: this.getHighScores,
-          takeDamage: this.takeDamage
+          takeDamage: this.takeDamage,
+          castFreezeSpell: this.castFreezeSpell,
+          castFireSpell: this.castFireSpell
         }
       }
   
@@ -84,6 +86,22 @@ export class Provider extends Component {
     takeDamage = async (heroId, damage) => {
       try{
         await this.data.takeDamage(heroId, damage);
+      } catch(error) {
+        this.setState({error});
+      }
+    }
+
+    castFreezeSpell = async (heroId, magicPoints) => {
+      try {
+        await this.data.castFreezeSpell(heroId, magicPoints);
+      } catch(error) {
+        this.setState({error});
+      }
+    }
+
+    castFireSpell = async (heroId, magicPoints) => {
+      try {
+        await this.data.castFireSpell(heroId, magicPoints);
       } catch(error) {
         this.setState({error});
       }

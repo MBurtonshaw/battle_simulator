@@ -28,4 +28,6 @@ CREATE TABLE hero_item (
     CONSTRAINT FK_hero_item_item FOREIGN KEY (item_name) REFERENCES item (item_name)
 );
 
+INSERT INTO item (item_name) VALUES ('Food'), ('Potion');
+
 COMMIT TRANSACTION;

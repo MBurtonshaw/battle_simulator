@@ -45,7 +45,7 @@ export default class Data {
 
   async addHero(name) {
     try {
-      return await this.api('api/hero', 'POST', { name });
+      return await this.api('api/hero', 'POST', name);
     } catch (error) {
       console.error('Failed to add hero:', error);
       throw error;
@@ -55,7 +55,7 @@ export default class Data {
   async defeatEnemy(heroId, exp) {
     try {
       return await this.api(`api/hero/${heroId}/win`, 'POST', exp)
-    } catch(error) {
+    } catch (error) {
       console.error('Failed to update after victory:', error);
       throw error;
     }
@@ -65,7 +65,7 @@ export default class Data {
     try {
       const response = await this.api(`api/hero/${heroId}/damage`, 'POST', damage);
       return response;
-    } catch(error) {
+    } catch (error) {
       console.error('Failed to damage hero:', error);
       throw error;
     }
@@ -75,7 +75,7 @@ export default class Data {
     try {
       const response = await this.api(`api/hero/${heroId}/freeze`, 'POST', magicPoints);
       return response;
-    } catch(error) {
+    } catch (error) {
       console.error('Failed to damage hero:', error);
       throw error;
     }
@@ -85,7 +85,7 @@ export default class Data {
     try {
       const response = await this.api(`api/hero/${heroId}/fire`, 'POST', magicPoints);
       return response;
-    } catch(error) {
+    } catch (error) {
       console.error('Failed to damage hero:', error);
       throw error;
     }
@@ -98,6 +98,66 @@ export default class Data {
       return response;
     } catch (error) {
       console.error('Failed to check hero for level:', error);
+      throw error;
+    }
+  }
+
+  async addItem(heroId, item) {
+    try {
+      const response = await this.api(`api/hero/${heroId}/addItem`, 'POST', item);
+      if (response.ok) {
+        console.log('Item added successfully');
+      } else if (response.status === 400) {
+        console.error('Item does not exist or bad request');
+      } else if (response.status === 404) {
+        console.error('Hero not found');
+      } else if (response.status === 500) {
+        console.error('Internal server error');
+      } else {
+        console.error('Unexpected response status:', response.status);
+      }
+    } catch (error) {
+      console.error('Failed to add item:', error);
+      throw error;
+    }
+  }
+
+  async useItem(heroId, item) {
+    try {
+      const response = await this.api(`api/hero/${heroId}/useItem`, 'POST', item);
+      if (response.ok) {
+        console.log('Item used successfully');
+      } else if (response.status === 400) {
+        console.error('Item does not exist or bad request');
+      } else if (response.status === 404) {
+        console.error('Hero not found');
+      } else if (response.status === 500) {
+        console.error('Internal server error');
+      } else {
+        console.error('Unexpected response status:', response.status);
+      }
+    } catch (error) {
+      console.error('Failed to add item:', error);
+      throw error;
+    }
+  }
+
+  async getItem(heroId, item) {
+    try {
+      const response = await this.api(`api/hero/${heroId}/getItem`, 'GET', item);
+      if (response.ok) {
+        console.log(response);
+      } else if (response.status === 400) {
+        console.error('Item does not exist or bad request');
+      } else if (response.status === 404) {
+        console.error('Hero not found');
+      } else if (response.status === 500) {
+        console.error('Internal server error');
+      } else {
+        console.error('Unexpected response status:', response.status);
+      }
+    } catch (error) {
+      console.error('Failed to add item:', error);
       throw error;
     }
   }

@@ -2,6 +2,7 @@ package com.example.demo.dao;
 
 import com.example.demo.model.Hero;
 import com.example.demo.model.Score;
+import com.example.demo.model.Item;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -9,14 +10,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
 
 @Component
 public class JdbcHeroDao implements HeroDao {
     private static final Logger logger = LoggerFactory.getLogger(JdbcHeroDao.class);
-    
+
     @Autowired
     private final JdbcTemplate jdbcTemplate;
 
@@ -26,26 +31,48 @@ public class JdbcHeroDao implements HeroDao {
 
     @Override
     public Hero getHero(int heroId) {
-        Hero hero = new Hero();
+        // String heroSql = "SELECT hero.hero_id, hero.name, hero.level,
+        // hero.health_points, hero.magic_points, hero.exp_points, hero.damage,
+        // hero.enemies_defeated, item.item_name "
+        // + "FROM hero "
+        // + "JOIN hero_item ON hero.hero_id = hero_item.hero_id "
+        // + "JOIN item ON hero_item.item_name = item.item_name "
+        // + "WHERE hero.hero_id = ?;";
         String heroSql = "SELECT hero_id, name, level, health_points, magic_points, exp_points, damage, enemies_defeated "
-                +
-                "FROM hero WHERE hero_id = ?;";
+                + "FROM hero "
+                + "WHERE hero.hero_id = ?;";
         try {
-            SqlRowSet results = jdbcTemplate.queryForRowSet(heroSql, heroId);
-            if (results.next()) {
-                hero.setHeroId(results.getInt("hero_id"));
-                hero.setName(results.getString("name"));
-                hero.setLevel(results.getInt("level"));
-                hero.setHealthPoints(results.getInt("health_points"));
-                hero.setMagicPoints(results.getInt("magic_points"));
-                hero.setExpPoints(results.getInt("exp_points"));
-                hero.setDamage(results.getInt("damage"));
-                hero.setEnemiesDefeated(results.getInt("enemies_defeated"));
-            }
-        } catch (Exception e) {
+            // Use query to handle multiple rows and build the Hero object
+            return jdbcTemplate.query(heroSql, (rs) -> {
+                Hero hero = null;
+                
+
+                while (rs.next()) {
+                    if (hero == null) {
+                        hero = new Hero();
+                        hero.setHeroId(rs.getInt("hero_id"));
+                        hero.setName(rs.getString("name"));
+                        hero.setLevel(rs.getInt("level"));
+                        hero.setHealthPoints(rs.getInt("health_points"));
+                        hero.setMagicPoints(rs.getInt("magic_points"));
+                        hero.setExpPoints(rs.getInt("exp_points"));
+                        hero.setDamage(rs.getInt("damage"));
+                        hero.setEnemiesDefeated(rs.getInt("enemies_defeated"));
+                        List<Item>inventory = getItems(rs.getInt("hero_id"));
+                        hero.setInventory(inventory);
+                    }
+                }
+                return hero;
+            }, heroId);
+        } catch (EmptyResultDataAccessException e) {
+            // Handle case when no result is found
+            logger.info("No hero found with ID {}", heroId);
+            return null;
+        } catch (DataAccessException e) {
+            // Handle other data access exceptions
             logger.error("Error retrieving hero with ID {}: {}", heroId, e.getMessage());
+            return null;
         }
-        return hero;
     }
 
     @Override
@@ -203,6 +230,135 @@ public class JdbcHeroDao implements HeroDao {
             // Log general exceptions
             logger.error("Error casting freeze spell for ID {}: {}", heroId, e.getMessage());
             throw new RuntimeException("Error updating hero level", e);
+        }
+    }
+
+    @Override
+    public void addItem(int heroId, String item) {
+        // Remove surrounding quotes if they exist
+        if (item != null && item.startsWith("\"") && item.endsWith("\"")) {
+            item = item.substring(1, item.length() - 1);
+        }
+
+        // Check if item exists in the item table
+        String checkItemSql = "SELECT COUNT(*) FROM item WHERE item_name = ?";
+        Integer count = jdbcTemplate.queryForObject(checkItemSql, Integer.class, item);
+
+        if (count == null || count == 0) {
+            // Handle item not found
+            throw new IllegalArgumentException("Item does not exist in the item table");
+        }
+
+        // Check if hero exists in hero table
+        String checkHeroSql = "SELECT COUNT(*) FROM hero WHERE hero_id = ?";
+        Integer heroCount = jdbcTemplate.queryForObject(checkHeroSql, Integer.class, heroId);
+
+        if (heroCount == null || heroCount == 0) {
+            // Handle hero not found
+            throw new IllegalArgumentException("Hero with ID " + heroId + " does not exist");
+        }
+
+        // Insert item into hero_item table
+        String addItemSql = "INSERT INTO hero_item (hero_id, item_name) VALUES (?, ?)";
+        try {
+            jdbcTemplate.update(addItemSql, heroId, item);
+        } catch (DataIntegrityViolationException e) {
+            // Handle data integrity violations
+            throw new RuntimeException("Data integrity violation: " + e.getMessage(), e);
+        } catch (Exception e) {
+            // Handle other exceptions
+            throw new RuntimeException("An error occurred: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public List<Item> getItems(int heroId) {
+        List<Item> foundItems = new ArrayList<>();
+        // SQL query to fetch item details based on heroId and itemName
+        String query = "SELECT item.item_name " +
+                "FROM item " +
+                "JOIN hero_item ON item.item_name = hero_item.item_name " +
+                "JOIN hero ON hero_item.hero_id = hero.hero_id " +
+                "WHERE hero.hero_id = ?;";
+
+        // Execute the query and obtain the result set
+        SqlRowSet results = jdbcTemplate.queryForRowSet(query, heroId);
+
+        // Check if the result set contains any rows
+        while (results.next()) {
+            // Extract data from the result set
+            String name = results.getString("item_name");
+
+            // Create and return an Item object with all necessary details
+            Item foundItem = new Item();
+            foundItem.setName(name);
+            foundItems.add(foundItem);
+
+        }
+        return foundItems;
+    }
+
+    @Override
+    public Hero useItem(int heroId, String item) {
+        // Remove surrounding quotes if they exist
+        item = (item != null && item.startsWith("\"") && item.endsWith("\""))
+                ? item.substring(1, item.length() - 1)
+                : item;
+
+        // SQL to delete the item from the hero's inventory
+        String useItemSql = "DELETE FROM hero_item WHERE hero_id = ? AND item_name = ?;";
+
+        try {
+            // Execute the delete operation
+            int rowsAffected = jdbcTemplate.update(useItemSql, heroId, item);
+
+            if (rowsAffected == 0) {
+                // No rows were affected, meaning the item wasn't found for the specified hero
+                logger.info("Item '{}' not found for hero with ID {}", item, heroId);
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Item not found for the specified hero");
+            }
+
+            // Apply item-specific effects
+            applyItemEffects(heroId, item);
+
+            // Retrieve and return the updated hero
+            return getHero(heroId);
+        } catch (DataAccessException e) {
+            // Handle data access exceptions
+            logger.error("Error while using item '{}' for hero with ID {}: {}", item, heroId, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error processing request", e);
+        }
+    }
+
+    private void applyItemEffects(int heroId, String item) {
+        switch (item) {
+            case "Food":
+                String foodSql = "UPDATE hero SET health_points = health_points + 30 WHERE hero_id = ?;";
+                int rowsAffectedFood = jdbcTemplate.update(foodSql, heroId);
+
+                if (rowsAffectedFood == 0) {
+                    // No rows were affected, which means the hero wasn't updated
+                    logger.info("Hero could not eat; hero with ID {}", heroId);
+                    throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                            "Could not apply food effects for the specified hero");
+                }
+                break;
+
+            case "Potion":
+                String potionSql = "UPDATE hero SET magic_points = magic_points + 10 WHERE hero_id = ?;";
+                int rowsAffectedPotion = jdbcTemplate.update(potionSql, heroId);
+
+                if (rowsAffectedPotion == 0) {
+                    // No rows were affected, which means the hero wasn't updated
+                    logger.info("Hero could not drink; hero with ID {}", heroId);
+                    throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                            "Could not apply potion effects for the specified hero");
+                }
+                break;
+
+            default:
+                logger.warn("Unsupported item type '{}'", item);
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unsupported item type");
         }
     }
 

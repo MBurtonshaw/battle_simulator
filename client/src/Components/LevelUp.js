@@ -18,7 +18,6 @@ function LevelUp() {
     setError(null);
     try {
       let heroData = await actions.getHero(heroId);
-      console.log(heroData)
       if (heroData) {
         if (heroData.level === 1) {
           heroData.spellsList = [];
@@ -80,9 +79,10 @@ function LevelUp() {
 
   function inventory() {
     if (hero && hero.inventory && hero.inventory.length > 0) {
-      return hero.inventory.map((item, index) => (
-        <li key={index} className='nonchalant'>{item}</li>
-      ));
+      // return hero.inventory.map((item, index) => (
+      //   <li key={index} className='nonchalant'>{item}</li>
+      // ));
+      return hero.inventory.map(item => <li key={item.name} className='nonchalant'>{item.name}</li>)
     }
     return <li className='nonchalant'>Inventory is empty</li>; // Optional fallback
   }

@@ -1,5 +1,8 @@
 package com.example.demo.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Hero {
     private int heroId;
     private String name;
@@ -9,6 +12,21 @@ public class Hero {
     private int expPoints;
     private int damage;
     private int enemiesDefeated;
+    private List<Item> inventory;
+
+    public Hero() {}
+
+    public Hero(int heroId, String name, int level, int healthPoints, int magicPoints, int expPoints, int damage, int enemiesDefeated, List<Item> inventory) {
+        this.heroId = heroId;
+        this.name = name;
+        this.level = level;
+        this.healthPoints = healthPoints;
+        this.magicPoints = magicPoints;
+        this.expPoints = expPoints;
+        this.damage = damage;
+        this.enemiesDefeated = enemiesDefeated;
+        this.inventory = inventory != null ? new ArrayList<>(inventory) : new ArrayList<>();
+    }
 
     public int getHeroId() {
         return heroId;
@@ -72,6 +90,14 @@ public class Hero {
 
     public void setEnemiesDefeated(int enemiesDefeated) {
         this.enemiesDefeated = enemiesDefeated;
+    }
+
+    public List<Item> getInventory() {
+        return inventory;
+    }
+
+    public void setInventory(List<Item> inventory) {
+        this.inventory = inventory;
     }
 
     public String toString() {

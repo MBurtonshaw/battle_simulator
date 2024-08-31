@@ -29,25 +29,25 @@ function Home() {
   return (
     <div className="Home">
       <h1>Welcome to the Battle Simulator!</h1>
-        <div className="container w-50 m-auto mt-5">
-          <label className='w-100 m-auto mt-5' htmlFor='name'>Umm..... could you remind me of your name?</label>
-          <input
-            className='mt-5'
-            type='text'
-            name='name'
-            id='name'
-            value={name}
-            onChange={handleNameChange}
-            maxLength={14} // Limit input length on the client side
-          />
-          <div className='w-100 m-auto p-5'>
+      <div className="container w-50 m-auto mt-5">
+        <label className='w-100 m-auto mt-5' htmlFor='name'>Umm..... could you remind me of your name?</label>
+        <input
+          className='mt-5'
+          type='text'
+          name='name'
+          id='name'
+          value={name}
+          onChange={handleNameChange}
+          maxLength={14} // Limit input length on the client side
+        />
+        <div className='w-100 m-auto p-5'>
           <button className='green_button' onClick={() => { startGame() }}>Start Game</button>
 
-          </div>
-          <div className='w-100 m-auto p-5'>
+        </div>
+        <div className='w-100 m-auto p-5'>
           <button className='blue_button' onClick={() => { navigate('/high_scores') }}>High Scores</button>
 
-          </div>
+        </div>
 
       </div>
     </div>

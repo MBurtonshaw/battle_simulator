@@ -49,6 +49,11 @@ code {
   color: white;
 }
 
+#item_button {
+  background-color: rgb(206, 65, 155);
+  color: white;
+}
+
 #fire_button_inactive {
   color: black;
   border: none;

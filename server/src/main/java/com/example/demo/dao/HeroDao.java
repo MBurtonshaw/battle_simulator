@@ -2,6 +2,7 @@ package com.example.demo.dao;
 
 import com.example.demo.model.Hero;
 import com.example.demo.model.Score;
+import com.example.demo.model.Item;
 
 import java.util.List;
 
@@ -14,4 +15,7 @@ public interface HeroDao {
     List<Score> getHighScores();
     Hero castFreezeSpell(int heroId, int magicPoints);
     Hero castFireSpell(int heroId, int magicPoints);
+    void addItem(int heroId, String item);
+    Hero useItem(int heroId, String item);
+    List<Item> getItems(int heroId);
 }

@@ -25,7 +25,6 @@ function Battle() {
         } else {
           heroResponse.spellsList = ['Freeze', 'Fire'];
         }
-        heroResponse.inventory = [];
         setHero(heroResponse);
       } catch (error) {
         console.error('Failed to fetch hero data', error);
@@ -50,6 +49,9 @@ function Battle() {
       const handleVictory = async () => {
         try {
           await actions.defeatEnemy(heroId, enemy.expGiven);
+          if (enemy.itemDropped !== '') {
+            await actions.addItem(heroId, enemy.itemDropped);
+          }
           const updatedHero = await actions.getHero(heroId);
           if (updatedHero.enemiesDefeated >= 10) {
             if (updatedHero.expPoints >= 100) {
@@ -157,7 +159,7 @@ function Battle() {
   }
   )
 
-  function buttonPlacer() {
+  function spellButtonPlacer() {
     if (hero.level === 1) {
       return (
         <button id='attack_button' className='mt-1 action_button' onClick={() => attack(hero.damage)}>Attack</button>
@@ -233,6 +235,32 @@ function Battle() {
     }
   }
 
+  async function consumeInventory(item) {
+    try {
+      const updatedHero = await actions.useItem(heroId, item);
+      setHero(updatedHero); // Update the hero state with the new values
+    } catch (error) {
+      console.error('Failed to use item:', error);
+    }
+  }
+
+  function inventoryButtonPlacer() {
+    if (hero.inventory) {
+      return (
+        hero.inventory.map((item, i) => {
+          return (
+            <div key={i}>
+              <button id='item_button' className='mt-1 action_button' onClick={() => consumeInventory(item.name)}>{item.name}</button>
+            </div>
+          )
+        })
+      )
+    }
+    return (
+      ''
+    );
+  }
+
   if (loading) {
     return (
       <div className='text-center mt-5 pt-5'>
@@ -267,9 +295,15 @@ function Battle() {
           <p>{`Health: ${enemyHealth}`}</p>
         </div>
       </div>
-      <div className='text-center mt-5'>
-        <h5 className='mt-5'>Actions: </h5>
-        {buttonPlacer()}
+      <div className='row w-50 m-auto'>
+        <div className='col text-center mt-5'>
+          <h5 className='mt-5'>Actions: </h5>
+          {spellButtonPlacer()}
+        </div>
+        <div className='col text-center mt-5'>
+          <h5 className='mt-5'>Items: </h5>
+          {inventoryButtonPlacer()}
+        </div>
       </div>
     </div>
   );

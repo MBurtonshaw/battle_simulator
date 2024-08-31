@@ -49,20 +49,20 @@ function Intro() {
           </div>
           <div className="mt-5 row w-50 m-auto">
             <div className='col'>
-            <label className='fs-4' htmlFor="heroLevel">Level: </label>
-            <p id="heroLevel" name="heroLevel" className='py-2 fs-5'>{hero.level}</p>
+              <label className='fs-4' htmlFor="heroLevel">Level: </label>
+              <p id="heroLevel" name="heroLevel" className='py-2 fs-5'>{hero.level}</p>
             </div>
             <div className='col'>
-            <label className='fs-4' htmlFor="heroHealth">Health: </label>
-            <p id="heroHealth" name="heroHealth" className='py-2 fs-5'>{hero.healthPoints}</p>
+              <label className='fs-4' htmlFor="heroHealth">Health: </label>
+              <p id="heroHealth" name="heroHealth" className='py-2 fs-5'>{hero.healthPoints}</p>
             </div>
             <div className='col'>
-            <label className='fs-4' htmlFor="heroMagic">Magic: </label>
-            <p id="heroMagic" name="heroMagic" className='py-2 fs-5'>{hero.magicPoints}</p>
+              <label className='fs-4' htmlFor="heroMagic">Magic: </label>
+              <p id="heroMagic" name="heroMagic" className='py-2 fs-5'>{hero.magicPoints}</p>
             </div>
             <div className='col'>
-            <label className='fs-4' htmlFor="heroDamage">Damage: </label>
-            <p id="heroDamage" name="heroDamage" className='py-2 fs-5'>{hero.damage}</p>
+              <label className='fs-4' htmlFor="heroDamage">Damage: </label>
+              <p id="heroDamage" name="heroDamage" className='py-2 fs-5'>{hero.damage}</p>
             </div>
           </div>
           <button className='m-4 green_button' onClick={() => navigate(`/${hero.heroId}/enemy/${enemyId}`)}>Next</button>

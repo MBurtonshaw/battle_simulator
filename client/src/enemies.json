@@ -15,7 +15,7 @@
             "healthPoints" : 30,
             "damage" : 10,
             "expGiven" : 50,
-            "itemDropped" : "healthPotion",
+            "itemDropped" : "Food",
             "picture" : "../../img/2.png"
         },
         {
@@ -24,7 +24,7 @@
             "healthPoints" : 45,
             "damage" : 12,
             "expGiven" : 50,
-            "itemDropped" : "magicPotion",
+            "itemDropped" : "Potion",
             "picture" : "../../img/3.png"
         },
         {
@@ -42,7 +42,7 @@
             "healthPoints" : 65,
             "damage" : 22,
             "expGiven" : 100,
-            "itemDropped" : "healthPotion",
+            "itemDropped" : "Food",
             "picture" : "../../img/5.png"
         },
         {
@@ -51,7 +51,7 @@
             "healthPoints" : 70,
             "damage" : 26,
             "expGiven" : 50,
-            "itemDropped" : "magicPotion",
+            "itemDropped" : "Potion",
             "picture" : "../../img/6.png"
         },
         {
@@ -60,7 +60,7 @@
             "healthPoints" : 90,
             "damage" : 30,
             "expGiven" : 50,
-            "itemDropped" : "healthPotion",
+            "itemDropped" : "Food",
             "picture" : "../../img/7.png"
         },
         {

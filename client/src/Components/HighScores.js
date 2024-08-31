@@ -54,7 +54,7 @@ function HighScores() {
           {score_loader()}
         </div>
         <div className='text-center mt-5'>
-        <a href='/'><button className='py-1 px-3'>Home</button></a>
+          <a href='/'><button className='py-1 px-3'>Home</button></a>
         </div>
 
       </div>

@@ -72,7 +72,7 @@ function App() {
                 <Lose />
               }
             />
-             <Route
+            <Route
               path='/high_scores'
               element={
                 <HighScores />

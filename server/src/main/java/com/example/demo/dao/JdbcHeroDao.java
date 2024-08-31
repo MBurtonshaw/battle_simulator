@@ -50,11 +50,17 @@ public class JdbcHeroDao implements HeroDao {
 
     @Override
     public Hero addHero(String name) {
-        String newHeroSql = "INSERT INTO hero VALUES(DEFAULT, ?, 1, 50, 20, 0, 10, 0) RETURNING hero_id;";
+        String newHeroSql = "INSERT INTO hero(hero_id, name, level, health_points, magic_points, exp_points, damage, enemies_defeated) VALUES(DEFAULT, ?, 1, 50, 20, 0, 10, 0) RETURNING hero_id;";
         int heroId = jdbcTemplate.queryForObject(newHeroSql, Integer.class, name);
         Hero newHero = new Hero();
         newHero.setHeroId(heroId);
         newHero.setName(name);
+        newHero.setLevel(1);
+        newHero.setHealthPoints(50);
+        newHero.setMagicPoints(20);
+        newHero.setExpPoints(0);
+        newHero.setDamage(10);
+        newHero.setEnemiesDefeated(0);
         return newHero;
     }
 

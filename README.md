@@ -10,7 +10,7 @@
 
 <h3 align="left">To Start: </h3>
 **Required: PGAdmin
-
+<br></br>
 <p>Open PGAdmin and create a new database. Run a query tool on it and open /server/database from this project. Run the .sql file there to create database tables.</p>
 <p>In the terminal, in the project root (/BattleGame), run "npm install" | navigate to /client and run "npm install"</p>
 <p>Once that's finished, navigate back to the root and run "npm start"</p>

@@ -21,17 +21,23 @@ function HighScores() {
   function score_loader() {
     if (highScores) {
       return (
-        <div className='text-center row w-50 m-auto pt-4'>
+        <div className='text-center row w-75 m-auto pt-4'>
           <div className='col'>
-            <label htmlFor='heroName' className='fs-4 pb-5'>Hero</label>
+            <label htmlFor='heroName' className='fs-2 pb-5'>Hero</label>
             {highScores.map((score, i) =>
-              <p key={i} name='heroName' id='heroName' className='py-2 fs-6'>{`${score.heroName}, level ${score.heroLevel}`}</p>
+              <p key={i} name='heroName' id='heroName' className='py-2 fs-4'>{score.heroName}</p>
             )}
           </div>
           <div className='col'>
-            <label htmlFor='heroScore' className='fs-4 pb-5'>Score</label>
+            <label htmlFor='heroLevel' className='fs-2 pb-5'>Level</label>
             {highScores.map((score, i) =>
-              <p key={i} name='heroScore' id='heroScore' className='py-2 fs-6'>{score.score}</p>
+              <p key={i} name='heroLevel' id='heroLevel' className='py-2 fs-4'>{score.heroLevel}</p>
+            )}
+          </div>
+          <div className='col'>
+            <label htmlFor='heroScore' className='fs-2 pb-5'>Score</label>
+            {highScores.map((score, i) =>
+              <p key={i} name='heroScore' id='heroScore' className='py-2 fs-4'>{score.score}</p>
             )}
           </div>
         </div>
@@ -48,13 +54,13 @@ function HighScores() {
     );
   } else {
     return (
-      <div className="">
-        <h1 className='text-center mt-3'>High Scores</h1>
+      <div className="Scores">
+        <h1 className='text-center mt-3'>HIGH SCORES</h1>
         <div className='high_score_div mt-5'>
           {score_loader()}
         </div>
-        <div className='text-center mt-5'>
-          <a href='/'><button className='py-1 px-3'>Home</button></a>
+        <div className='text-center m-5 pb-5'>
+          <a href='/'><button className='green_button'>Home</button></a>
         </div>
 
       </div>

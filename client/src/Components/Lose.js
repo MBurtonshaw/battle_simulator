@@ -80,14 +80,14 @@ function Lose() {
         <div className="mt-2 w-50 m-auto">
           <div className=''>
             <label className='fs-4' htmlFor="heroLevel">Level: </label>
-            <p id="heroLevel" name="heroLevel" className='py-1 fs-5'>{hero.level}</p>
+            <p id="heroLevel" name="heroLevel" className='pt-1 fs-5'>{hero.level}</p>
           </div>
           <div className=''>
             <label className='fs-4' htmlFor="heroScore">Enemies Defeated: </label>
-            <p id="heroScore" name="heroScore" className='py-1 fs-5'>{hero.enemiesDefeated}</p>
+            <p id="heroScore" name="heroScore" className='pt-1 fs-5'>{hero.enemiesDefeated}</p>
           </div>
         </div>
-        <button className='m-2 py-1 px-3' onClick={() => navigate(`/high_scores`)}>Next</button>
+        <button className='m-2 green_button mb-3' onClick={() => navigate(`/high_scores`)}>Next</button>
       </div>
     );
   }

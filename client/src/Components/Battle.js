@@ -2,6 +2,12 @@ import { useContext, useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Context } from '../Contexts/context';
 import enemies from '../enemies.json';
+import sword_hit from '../sounds/sword_slash.mp3';
+import crackling_fire from '../sounds/crackling_fire.wav';
+import eerie_wind from '../sounds/eerie_wind.wav';
+import uncork from '../sounds/uncork.wav';
+import drink from '../sounds/drink.wav';
+import eating from '../sounds/eating.mp3';
 
 function Battle() {
   const { data, actions } = useContext(Context);
@@ -13,6 +19,12 @@ function Battle() {
   const [isPlayerTurn, setIsPlayerTurn] = useState(true);
   const [isEnemyFrozen, setIsEnemyFrozen] = useState(false);
   const navigate = useNavigate();
+  const clash = new Audio(sword_hit);
+  const fire = new Audio(crackling_fire);
+  const freeze = new Audio(eerie_wind);
+  const corked = new Audio(uncork);
+  const gulp = new Audio(drink);
+  const chewing = new Audio(eating);
 
   useEffect(() => {
     async function getData() {
@@ -79,6 +91,7 @@ function Battle() {
   const attack = async (damage) => {
     if (isPlayerTurn) {
       if (enemy && hero) {
+        clash.play();
         setEnemyHealth((prevHealth) => {
           const newHealth = Math.max(prevHealth - damage, 0);
           return newHealth;
@@ -109,7 +122,6 @@ function Battle() {
                   healthPoints: newHealth,
                 };
               }
-
               // Continue the battle
               setIsPlayerTurn(true);
               return {
@@ -137,6 +149,7 @@ function Battle() {
 
   const castFreezeSpell = useCallback(async () => {
     if (hero.magicPoints >= 10) {
+      freeze.play();
       await actions.castFreezeSpell(heroId, 10);
       let updatedHero = await actions.getHero(heroId);
       setHero(updatedHero);
@@ -149,6 +162,7 @@ function Battle() {
 
   const castFireSpell = useCallback(async () => {
     if (hero.magicPoints >= 15) {
+      fire.play();
       await actions.castFireSpell(heroId, 15);
       let updatedHero = await actions.getHero(heroId);
       setHero(updatedHero);
@@ -237,8 +251,17 @@ function Battle() {
 
   async function consumeInventory(item) {
     try {
-      const updatedHero = await actions.useItem(heroId, item);
-      setHero(updatedHero); // Update the hero state with the new values
+      if (item === 'Food') {
+        chewing.play();
+        const updatedHero = await actions.useItem(heroId, item);
+        setHero(updatedHero); // Update the hero state with the new values
+      } else {
+        corked.play();
+        window.setInterval(1000);
+        gulp.play();
+        const updatedHero = await actions.useItem(heroId, item);
+        setHero(updatedHero); // Update the hero state with the new values
+      }
     } catch (error) {
       console.error('Failed to use item:', error);
     }
@@ -248,11 +271,20 @@ function Battle() {
     if (hero.inventory) {
       return (
         hero.inventory.map((item, i) => {
-          return (
-            <div key={i}>
-              <button id='item_button' className='mt-1 action_button' onClick={() => consumeInventory(item.name)}>{item.name}</button>
-            </div>
-          )
+          if (item.name === 'Food') {
+            return (
+              <div key={i}>
+                <button id='food_button' className='mt-1 action_button' onClick={() => consumeInventory(item.name)}>{item.name}</button>
+              </div>
+            )
+          }
+          if (item.name === 'Potion') {
+            return (
+              <div key={i}>
+                <button id='potion_button' className='mt-1 action_button' onClick={() => consumeInventory(item.name)}>{item.name}</button>
+              </div>
+            )
+          }
         })
       )
     }
@@ -279,32 +311,38 @@ function Battle() {
 
 
   return (
-    <div className="row align-items-center w-75 m-auto mt-5">
-      <div className='col text-center'>
-        <img className='battle_img' src={'../../../img/hero_fighter.png'} alt={'The hero, a fantasy fighter with a sword'} />
-        <div className='row w-50 m-auto'>
-          <h1>{hero.name}</h1>
-          <p className='col'>{`Health: ${hero.healthPoints}`}</p>
-          <p className='col'>{`Magic: ${hero.magicPoints}`}</p>
+    <div className="Battle m-auto text-center">
+      <div className='mt-2'>
+        <h1>{`${hero.name} vs ${enemy.name}`}</h1>
+      </div>
+      <div className='row align-items-center mt-5'>
+        <div id='hero_div' className='col text-center'>
+          <img className='battle_img' src={'../../../img/hero_fighter.png'} alt={'The hero, a fantasy fighter with a sword'} />
+          <div className='row w-50 m-auto'>
+            <h1>{hero.name}</h1>
+            <p className='col'>{`Health: ${hero.healthPoints}`}</p>
+            <p className='col'>{`Magic: ${hero.magicPoints}`}</p>
+          </div>
+        </div>
+        <div className='col text-center'>
+          <img className='battle_img' src={`${enemy.picture}`} alt={`${enemy.name}, a fantasy character posing to fight`} />
+          <div className='row w-50 m-auto'>
+            <h1>{enemy.name}</h1>
+            <p>{`Health: ${enemyHealth}`}</p>
+          </div>
+        </div>
+        <div className='row w-50 m-auto p-2'>
+          <div className='col text-center my-5'>
+            <h5 className='mt-5'>Actions: </h5>
+            {spellButtonPlacer()}
+          </div>
+          <div className='col text-center my-5'>
+            <h5 className='mt-5'>Items: </h5>
+            {inventoryButtonPlacer()}
+          </div>
         </div>
       </div>
-      <div className='col text-center'>
-        <img className='battle_img' src={`${enemy.picture}`} alt={`${enemy.name}, a fantasy character posing to fight`} />
-        <div className='row w-50 m-auto'>
-          <h1>{enemy.name}</h1>
-          <p>{`Health: ${enemyHealth}`}</p>
-        </div>
-      </div>
-      <div className='row w-50 m-auto'>
-        <div className='col text-center mt-5'>
-          <h5 className='mt-5'>Actions: </h5>
-          {spellButtonPlacer()}
-        </div>
-        <div className='col text-center mt-5'>
-          <h5 className='mt-5'>Items: </h5>
-          {inventoryButtonPlacer()}
-        </div>
-      </div>
+
     </div>
   );
 }

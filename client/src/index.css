@@ -5,11 +5,50 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: white url("../public/img/twilight_castle_transparent.png") no-repeat fixed center;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+#Home {
+  width: 100vw;
+  height: 100vh;
+
+}
+
+.Intro {
+  background-color: rgba(255, 255, 255, 0.7);
+  padding-top: 1em;
+  width: 50%;
+  margin: auto;
+}
+
+.Enemy {
+  background-color: rgba(255, 255, 255, 0.7);
+  padding-top: 1em;
+  width: 50%;
+  margin: auto;
+}
+
+.Battle {
+  background-color: rgba(255, 255, 255, 0.7);
+  padding-top: 1em;
+  width: 75%;
+  margin: auto;
+}
+
+.Scores {
+  background-color: rgba(255, 255, 255, 0.7);
+  padding-top: 1em;
+  width: 50%;
+  margin: auto;
+}
+
+.home_container {
+  background-color: rgba(255, 255, 255, 0.7);
 }
 
 .Home, .Intro {
@@ -27,7 +66,7 @@ code {
 }
 
 #attack_button {
-  background-color: rgb(104, 46, 137);
+  background-color: rgb(126, 62, 163);
   color: white;
 }
 
@@ -49,8 +88,13 @@ code {
   color: white;
 }
 
-#item_button {
+#food_button {
   background-color: rgb(206, 65, 155);
+  color: white;
+}
+
+#potion_button {
+  background-color: rgb(74, 61, 251);
   color: white;
 }
 
@@ -66,6 +110,10 @@ code {
   border: none;
   padding: 0.75em 3.5em;
   border-radius: 7px;
+}
+
+.penis {
+  background-color: green;
 }
 
 .green_button {

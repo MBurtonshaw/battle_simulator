@@ -85,7 +85,7 @@ function Win() {
             <p id="heroScore" name="heroScore" className='py-2 fs-5'>{hero.enemiesDefeated}</p>
           </div>
         </div>
-        <button className='m-3 py-1 px-3' onClick={() => navigate(`/high_scores`)}>Next</button>
+        <button className='m-3 green_button mb-5' onClick={() => navigate(`/high_scores`)}>Next</button>
       </div>
     );
   }

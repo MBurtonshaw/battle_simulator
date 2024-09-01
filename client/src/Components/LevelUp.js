@@ -121,7 +121,7 @@ function LevelUp() {
     return (
       <div className="Intro">
         <h1 className='text-center mt-2'>{`${hero.name}, the Hero - is now level ${hero.level}!`}</h1>
-        <div className='mt-3'>
+        <div className='mt-4'>
           <img src='../../../img/hero_fighter.png' alt='The hero, a fantasy fighter with a sword' />
         </div>
         <div className="mt-3 row w-50 m-auto">
@@ -142,7 +142,7 @@ function LevelUp() {
             <p id="heroDamage" name="heroDamage" className='py-2 fs-5'>{hero.damage}</p>
           </div>
         </div>
-        <div className='row w-25 m-auto mt-2'>
+        <div className='row w-50 m-auto mt-2'>
           <div className='col'>
             <h3>Spells</h3>
             <ul>
@@ -156,7 +156,7 @@ function LevelUp() {
             </ul>
           </div>
         </div>
-        <button className='m-3 py-1 px-3' onClick={() => determineNav()}>Next</button>
+        <button className='m-4 green_button' onClick={() => determineNav()}>Next</button>
       </div>
     );
   }

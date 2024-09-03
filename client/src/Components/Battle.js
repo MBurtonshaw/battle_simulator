@@ -14,7 +14,7 @@ function Battle() {
   const { heroId, enemyId } = useParams();
   const [enemy, setEnemy] = useState(null);
   const [hero, setHero] = useState(null);
-  const [enemyHealth, setEnemyHealth] = useState(0);
+  const [enemyHealth, setEnemyHealth] = useState(1);
   const [loading, setLoading] = useState(true);
   const [isPlayerTurn, setIsPlayerTurn] = useState(true);
   const [isEnemyFrozen, setIsEnemyFrozen] = useState(false);
@@ -96,9 +96,11 @@ function Battle() {
           const newHealth = Math.max(prevHealth - damage, 0);
           return newHealth;
         });
+        setIsPlayerTurn(false);
+        setTimeout(() => {
+          setIsPlayerTurn(true);
+        }, 1000); 
       }
-      setIsPlayerTurn(false);
-
     }
   };
 
@@ -143,7 +145,9 @@ function Battle() {
 
   useEffect(() => {
     if (!isPlayerTurn) {
-      enemyAttack();
+      setTimeout(() => {
+        enemyAttack();
+      }, 1000); 
     }
   }, [isPlayerTurn, enemyAttack]);
 
@@ -253,15 +257,18 @@ function Battle() {
     try {
       if (item === 'Food') {
         chewing.play();
-        const updatedHero = await actions.useItem(heroId, item);
-        setHero(updatedHero); // Update the hero state with the new values
       } else {
         corked.play();
-        window.setInterval(1000);
         gulp.play();
-        const updatedHero = await actions.useItem(heroId, item);
-        setHero(updatedHero); // Update the hero state with the new values
       }
+      const updatedHero = await actions.useItem(heroId, item);
+      setHero(updatedHero); // Update the hero state with the new values
+      setIsPlayerTurn(false);
+      // Delay the enemy attack to allow item effects to be visible
+      setTimeout(() => {
+        setIsPlayerTurn(false); // Ensure the enemy attacks after using an item
+      }, 1000); // 1-second delay before the enemy attacks
+  
     } catch (error) {
       console.error('Failed to use item:', error);
     }

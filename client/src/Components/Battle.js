@@ -8,6 +8,14 @@ import eerie_wind from '../sounds/eerie_wind.wav';
 import uncork from '../sounds/uncork.wav';
 import drink from '../sounds/drink.wav';
 import eating from '../sounds/eating.mp3';
+const soundEffects = {
+  clash: new Audio(sword_hit),
+  fire: new Audio(crackling_fire),
+  freeze: new Audio(eerie_wind),
+  corked: new Audio(uncork),
+  gulp: new Audio(drink),
+  chewing: new Audio(eating),
+};
 
 function Battle() {
   const { data, actions } = useContext(Context);
@@ -19,12 +27,6 @@ function Battle() {
   const [isPlayerTurn, setIsPlayerTurn] = useState(true);
   const [isEnemyFrozen, setIsEnemyFrozen] = useState(false);
   const navigate = useNavigate();
-  const clash = new Audio(sword_hit);
-  const fire = new Audio(crackling_fire);
-  const freeze = new Audio(eerie_wind);
-  const corked = new Audio(uncork);
-  const gulp = new Audio(drink);
-  const chewing = new Audio(eating);
 
   useEffect(() => {
     async function getData() {
@@ -91,7 +93,7 @@ function Battle() {
   const attack = async (damage) => {
     if (isPlayerTurn) {
       if (enemy && hero) {
-        clash.play();
+        soundEffects[0].play();
         setEnemyHealth((prevHealth) => {
           const newHealth = Math.max(prevHealth - damage, 0);
           return newHealth;

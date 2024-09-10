@@ -7,6 +7,7 @@ DROP TABLE IF EXISTS hero_item CASCADE;
 CREATE TABLE hero (
     hero_id SERIAL,
     name varchar(14) NOT NULL,
+	level int,
     health_points int,
     magic_points int,
     exp_points int,

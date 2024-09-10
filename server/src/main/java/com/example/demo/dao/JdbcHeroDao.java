@@ -136,7 +136,12 @@ public class JdbcHeroDao implements HeroDao {
             // Increase the hero's level
             hero.setLevel(hero.getLevel() + 1);
             hero.setExpPoints(remainder);
-            hero.setHealthPoints((hero.getHealthPoints() * 5) / 2);
+            if (hero.getLevel() < 5) {
+                hero.setHealthPoints((hero.getHealthPoints() * 5) / 2);
+            } else {
+                hero.setHealthPoints((hero.getHealthPoints() * 5) / 3);
+            }
+
             hero.setMagicPoints(hero.getMagicPoints() + 10);
             hero.setDamage((int) (Math.round((hero.getDamage() * 3) / 1.8)));
             // Update the hero in the database
